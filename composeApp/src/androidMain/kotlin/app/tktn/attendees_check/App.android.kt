@@ -1,17 +1,26 @@
 package app.tktn.attendees_check
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import app.tktn.attendees_check.di.RootAppModule
 import org.koin.core.context.startKoin
+import org.koin.ksp.generated.module
+
+class RootApp : Application(){
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            modules(RootAppModule().module)
+        }
+    }
+}
 
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startKoin {
-            modules(listOf())
-        }
         enableEdgeToEdge()
         setContent { RootApp() }
     }

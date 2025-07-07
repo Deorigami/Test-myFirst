@@ -37,6 +37,7 @@ include(
     ":composeApp",
     ":features:feature_auth",
     ":features:feature_dashboard",
+    ":features:feature_util",
     ":cores:core_feature",
     ":cores:components",
     ":cores:core_service",

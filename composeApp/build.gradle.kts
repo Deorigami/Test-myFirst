@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -47,6 +48,9 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.enableLanguageFeature("ExplicitBackingFields")
+        }
         commonMain.configure {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
@@ -80,6 +84,7 @@ kotlin {
 
                 implementation(project(":features:feature_auth"))
                 implementation(project(":features:feature_dashboard"))
+                implementation(project(":features:feature_util"))
                 implementation(project(":cores:core_feature"))
             }
         }
@@ -168,7 +173,19 @@ tasks.withType<ComposeHotRun>().configureEach {
 //room {
 //    schemaDirectory("$projectDir/schemas")
 //}
-
+tasks.withType<KotlinCompilationTask<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+afterEvaluate {
+    tasks.filter {
+        it.name.contains("SourcesJar", true)
+    }.forEach {
+        println("SourceJarTask====>${it.name}")
+        it.dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
 dependencies {
 //    with(libs.room.compiler) {
 //        add("kspAndroid", this)

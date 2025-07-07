@@ -27,10 +27,12 @@ composeIcons = "1.1.1"
 permission = "0.12.2"
 supabase = "3.1.4"
 compass = "1.2.2"
+adaptive = "1.1.2"
 
 [libraries]
 
 camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
+compose-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 android-faceDetection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }
