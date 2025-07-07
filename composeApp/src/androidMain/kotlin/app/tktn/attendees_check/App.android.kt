@@ -9,7 +9,7 @@ import app.tktn.attendees_check.di.RootAppModule
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
 
-class RootApp : Application(){
+class MyApp : Application(){
     override fun onCreate() {
         super.onCreate()
         startKoin {

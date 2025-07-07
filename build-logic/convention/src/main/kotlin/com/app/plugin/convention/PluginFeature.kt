@@ -5,6 +5,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.withType
@@ -12,6 +13,7 @@ import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
@@ -54,6 +56,7 @@ class PluginFeature : Plugin<Project> {
                 }
 
                 sourceSets.apply {
+
                     commonMain.configure {
                         kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
                         dependencies {
@@ -97,19 +100,32 @@ class PluginFeature : Plugin<Project> {
                             implementation(libs.findLibrary("compose.adaptive").get())
                         }
                     }
-                    androidMain.dependencies {
-                        implementation(compose.uiTooling)
-                        implementation(libs.findLibrary("androidx.activityCompose").get())
-                        implementation(libs.findLibrary("kotlinx.coroutines.android").get())
-                        implementation(libs.findLibrary("ktor.client.okhttp").get())
+                    val mobileMain = create("mobileMain").apply {
+                        val commonMain = getByName("commonMain")
+                        dependsOn(commonMain)
+                        dependencies {
+
+                        }
+                    }
+                    androidMain.configure {
+                        dependsOn(mobileMain)
+                        dependencies {
+                            implementation(compose.uiTooling)
+                            implementation(libs.findLibrary("androidx.activityCompose").get())
+                            implementation(libs.findLibrary("kotlinx.coroutines.android").get())
+                            implementation(libs.findLibrary("ktor.client.okhttp").get())
+                        }
                     }
                     jvmMain.dependencies {
                         implementation(compose.desktop.currentOs)
                         implementation(libs.findLibrary("kotlinx.coroutines.swing").get())
                         implementation(libs.findLibrary("ktor.client.okhttp").get())
                     }
-                    iosMain.dependencies {
-                        implementation(libs.findLibrary("ktor.client.darwin").get())
+                    iosMain.configure {
+                        dependsOn(mobileMain)
+                        dependencies {
+                            implementation(libs.findLibrary("ktor.client.darwin").get())
+                        }
                     }
                 }
             }
