@@ -98,6 +98,9 @@ class PluginFeature : Plugin<Project> {
                             implementation(libs.findLibrary("koin.compose.viewmodel").get())
                             implementation(libs.findLibrary("koin.annotations").get())
                             implementation(libs.findLibrary("compose.adaptive").get())
+							implementation(libs.findLibrary("androidx.navigation3.ui").get())
+							implementation(libs.findLibrary("androidx.navigation3.event").get())
+							implementation(libs.findLibrary("androidx.navigation3.material3.adaptive").get())
                         }
                     }
                     val mobileMain = create("mobileMain").apply {

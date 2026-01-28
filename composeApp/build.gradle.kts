@@ -16,7 +16,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.hotReload)
+//    alias(libs.plugins.hotReload)
     alias(libs.plugins.kotlinx.serialization)
 //    alias(libs.plugins.room)
     alias(libs.plugins.ksp)
@@ -69,6 +69,9 @@ kotlin {
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime)
                 implementation(libs.androidx.navigation.compose)
+                implementation(libs.androidx.navigation3.ui)
+                implementation(libs.androidx.navigation3.event)
+                implementation(libs.androidx.navigation3.material3.adaptive)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.coil)
                 implementation(libs.coil.network.ktor)
@@ -161,9 +164,9 @@ compose.desktop {
     }
 }
 
-tasks.withType<ComposeHotRun>().configureEach {
-    mainClass.set("MainKt")
-}
+//tasks.withType<ComposeHotRun>().configureEach {
+//    mainClass.set("MainKt")
+//}
 
 //buildConfig {
 //    // BuildConfig configuration here.

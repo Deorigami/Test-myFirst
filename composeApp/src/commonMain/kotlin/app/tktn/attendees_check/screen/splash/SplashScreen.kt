@@ -19,7 +19,7 @@ object SplashScreen : BaseScreen() {
         get() = this::class.simpleName
 
     @Composable
-    override fun ComposeContent(navHostController: NavHostController) {
+    override fun ComposeContent() {
         val screenConfiguration = rememberScreenConfiguration()
         LaunchedEffect(
             screenConfiguration

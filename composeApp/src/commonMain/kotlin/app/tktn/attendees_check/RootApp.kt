@@ -1,32 +1,27 @@
 package app.tktn.attendees_check
 
-import androidx.compose.runtime.*
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import app.tktn.attendees_check.screen.splash.SplashScreen
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.toMutableStateList
+import androidx.navigation3.ui.NavDisplay
+import app.tktn.attendees_check.navigation.NavDestinations
+import app.tktn.attendees_check.navigation.setupNavigation
 import app.tktn.attendees_check.theme.AppTheme
-import app.tktn.core_feature.util.LocalNavigationController
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import app.tktn.core_feature.navigation.LocalNavStack
 
-@Preview
 @Composable
-internal fun RootApp(
-    navHostController: NavHostController = rememberNavController()
-) {
+internal fun RootApp() {
     AppTheme {
         CompositionLocalProvider(
-            LocalNavigationController provides navHostController
+            LocalNavStack provides NavDestinations.backStack.toList().toMutableStateList()
         ) {
-            NavHost(
-                navHostController,
-                startDestination = SplashScreen
-            ){
-                composable<SplashScreen> {
-                    SplashScreen.ComposableScreen()
-                }
-            }
+            NavDisplay(
+                backStack = NavDestinations.backStack,
+                onBack = {
+                    NavDestinations.backStack.removeLastOrNull()
+                },
+                entryProvider = { it.setupNavigation() }
+            )
         }
     }
 }

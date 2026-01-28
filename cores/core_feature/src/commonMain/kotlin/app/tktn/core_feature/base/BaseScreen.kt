@@ -10,8 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.navigation.NavHostController
-import app.tktn.core_feature.util.LocalNavigationController
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,23 +20,13 @@ abstract class BaseScreen {
     open val backPressEnabled: Boolean = false
 
     @Composable
-    protected open fun ComposeContent(navHostController: NavHostController) {
-    }
-
-    @Composable
     protected open fun ComposeContent() {
     }
 
     abstract val pageName: String?
 
     @Composable
-    open fun OnResultListener(navController: NavHostController) {
-    }
-
-    @Composable
     fun ComposableScreen() {
-        val navController = LocalNavigationController.current
-        ComposeContent(navController)
         ComposeContent()
     }
 }

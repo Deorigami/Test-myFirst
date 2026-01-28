@@ -13,7 +13,7 @@ object AuthScreen : BaseScreen() {
         get() = this::class.simpleName
 
     @Composable
-    override fun ComposeContent(navHostController: NavHostController) {
+    override fun ComposeContent() {
 
     }
 }
