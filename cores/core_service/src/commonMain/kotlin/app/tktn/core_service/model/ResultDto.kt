@@ -1,13 +1,14 @@
 package app.tktn.core_service.model
 
-//import de.jensklingenberg.ktorfit.Response
-//import io.ktor.client.plugins.ClientRequestException
+
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class ResultDto<DTO>(
     val data: DTO? = null,
+	@SerialName("response_desc")
     val message: String? = "",
     val status: Boolean? = null,
 ) {
@@ -19,14 +20,5 @@ data class ResultDto<DTO>(
                 status = status ?: false
             )
         }
-//        fun <ENTITY, DTO> Response<ResultDto<DTO>>.toDomainResult(block: (DTO) -> ENTITY): DomainResult<ENTITY> {
-//            if (this.isSuccessful.not()) throw ClientRequestException(raw(), "")
-//            return DomainResult(
-//                this.body()?.data?.let { block.invoke(it) },
-//                message,
-//                this.body()?.status ?: (code in 200..204),
-//                code = code
-//            )
-//        }
     }
 }

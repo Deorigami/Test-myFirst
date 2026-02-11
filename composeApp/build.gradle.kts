@@ -59,6 +59,8 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+				implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+				implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
                 implementation(libs.kermit)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.core)
@@ -86,9 +88,13 @@ kotlin {
                 implementation(libs.materialKolor)
 
                 implementation(project(":features:feature_auth"))
-                implementation(project(":features:feature_dashboard"))
+                implementation(project(":features:feature_feed"))
                 implementation(project(":features:feature_util"))
                 implementation(project(":cores:core_feature"))
+                implementation(project(":cores:core_service"))
+                implementation(project(":cores:components"))
+				implementation(project(":features:feature_explore"))
+				implementation(project(":features:feature_profile"))
             }
         }
 
@@ -133,6 +139,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+	buildTypes {
+		getByName("release") {
+			signingConfig = signingConfigs.getByName("debug")
+		}
+	}
 }
 
 //https://developer.android.com/develop/ui/compose/testing#setup

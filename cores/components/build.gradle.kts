@@ -8,3 +8,8 @@ kotlin.sourceSets.commonMain {
 }
 
 android.namespace = "app.tktn.components"
+
+compose.resources {
+	publicResClass = true
+	packageOfResClass = "app.tktn.components"
+}

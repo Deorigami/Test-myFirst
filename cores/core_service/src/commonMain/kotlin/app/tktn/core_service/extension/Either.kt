@@ -13,6 +13,16 @@ suspend fun <R> either(block: suspend () -> DomainResult<R>): StatefulResponse<R
 
 fun <T> StatefulResponse<T>.toResult(default: T): StatefulResult<T> {
     return when {
+
+		// this one is for MASI Test
+
+		this is StatefulResponse.Success && this.data.data != null -> StatefulResult.Success(
+			data = this.data.data,
+			message = this.data.message ?: "Success",
+			status = data.status,
+			code = 200
+		)
+
         this is StatefulResponse.Success && this.data.status && this.data.data != null -> {
             StatefulResult.Success(
                 data = this.data.data,

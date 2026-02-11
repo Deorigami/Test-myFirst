@@ -1,6 +1,7 @@
 package com.app.plugin.convention
 
 import com.android.build.gradle.LibraryExtension
+import de.jensklingenberg.ktorfit.gradle.KtorfitPluginExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+import kotlin.text.set
 
 class PluginService : Plugin<Project> {
     @OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
@@ -22,12 +24,15 @@ class PluginService : Plugin<Project> {
             plugins.apply {
                 apply(libs.findPlugin("multiplatform").get().get().pluginId)
                 apply(libs.findPlugin("android.library").get().get().pluginId)
+                apply(libs.findPlugin("ktorfit").get().get().pluginId)
                 apply(libs.findPlugin("kotlinx.serialization").get().get().pluginId)
                 apply(libs.findPlugin("ksp").get().get().pluginId)
             }
 
             extensions.configure<KotlinMultiplatformExtension> {
-
+				compilerOptions {
+					freeCompilerArgs.set(listOf("-Xcontext-parameters"))
+				}
                 androidTarget {
                     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
                     instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
@@ -65,6 +70,10 @@ class PluginService : Plugin<Project> {
                             implementation(libs.findLibrary("kotlinx.serialization.json").get())
                             implementation(libs.findLibrary("multiplatformSettings").get())
                             implementation(libs.findLibrary("kotlinx.datetime").get())
+                            implementation(libs.findLibrary("ktorfit").get())
+                            implementation(libs.findLibrary("ktorfit.converter").get())
+                            implementation(libs.findLibrary("ktorfit.converter.call").get())
+                            implementation(libs.findLibrary("ktorfit.converter.flow").get())
                             implementation(project.dependencies.platform(libs.findLibrary("koin.bom").get()))
                             implementation(project.dependencies.platform(libs.findLibrary("koin.annotations.bom").get()))
                             implementation(libs.findLibrary("koin.core").get())
@@ -84,6 +93,9 @@ class PluginService : Plugin<Project> {
                     }
                 }
             }
+			extensions.configure<KtorfitPluginExtension> {
+				kotlinVersion.set("2.3.3")
+			}
             extensions.configure<LibraryExtension> {
                 compileSdk = 36
                 defaultConfig {
@@ -119,6 +131,7 @@ class PluginService : Plugin<Project> {
             }
             dependencies {
                 add("kspCommonMainMetadata", libs.findLibrary("koin.annotations.ksp").get())
+                add("kspCommonMainMetadata", libs.findLibrary("ktorfit.ksp").get())
             }
             configurations.configureEach {
                 exclude("androidx.window.core", "window-core")

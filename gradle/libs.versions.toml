@@ -13,6 +13,7 @@ androidx-uiTest = "1.10.0"
 kermit = "2.0.8"
 kotlinx-coroutines = "1.10.2"
 ktor = "3.4.0"
+ktorfit = "2.4.0"
 androidx-lifecycle = "2.9.6"
 androidx-navigation = "2.9.1"
 kotlinx-serialization = "1.10.0"
@@ -31,6 +32,7 @@ adaptive = "1.1.2"
 navigation3 = "1.1.0-alpha01"
 navigation3Event = "1.0.0-rc02"
 androidxNavigation3Material = "1.3.0-alpha03"
+composeMediaPlayer = "0.8.7"
 
 [libraries]
 
@@ -40,6 +42,7 @@ android-faceDetection = { module = "com.google.mlkit:face-detection", version.re
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
+composeMediaPlayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composeMediaPlayer" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 androidx-navigation3-event = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigation3Event" }
@@ -73,7 +76,7 @@ androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:life
 androidx-lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-coil = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 permission = { module = "tech.kotlinlang:permission", version.ref = "permission" }
@@ -85,11 +88,17 @@ supabase-composeAuth = { group = "io.github.jan-tennert.supabase", name = "compo
 supabase-storage = { group = "io.github.jan-tennert.supabase", name = "storage-kt" }
 supabase-function = { group = "io.github.jan-tennert.supabase", name = "functions-kt" }
 supabase-coil = { group = "io.github.jan-tennert.supabase", name = "coil3-integration" }
+ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+ktorfit-converter = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-response", version.ref = "ktorfit" }
+ktorfit-converter-call = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
+ktorfit-converter-flow = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-flow", version.ref = "ktorfit" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+ktorfit-gradlePlugin = { module = "de.jensklingenberg.ktorfit:ktorfit-gradle-plugin", version.ref = "ktorfit" }
 
 
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
@@ -112,6 +121,7 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotReload"}
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 
 [bundles]
 supabase = [

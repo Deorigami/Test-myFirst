@@ -36,8 +36,11 @@ plugins {
 include(
     ":composeApp",
     ":features:feature_auth",
-    ":features:feature_dashboard",
+	":features:feature_feed",
     ":features:feature_util",
+    ":features:feature_explore",
+    ":features:feature_profile",
+    ":services:service_feed",
     ":cores:core_feature",
     ":cores:components",
     ":cores:core_service",

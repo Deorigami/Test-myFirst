@@ -14,16 +14,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 abstract class BaseScreen {
-    open val headerTitle: String? = null
-    open val hasLiveTimeDisplay: Boolean = true
-    open val hasHeader: Boolean = true
-    open val backPressEnabled: Boolean = false
 
     @Composable
     protected open fun ComposeContent() {
     }
 
-    abstract val pageName: String?
+    open val pageName: String? = this::class.simpleName
 
     @Composable
     fun ComposableScreen() {

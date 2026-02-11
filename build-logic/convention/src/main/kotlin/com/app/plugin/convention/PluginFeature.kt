@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+import kotlin.text.set
 
 class PluginFeature : Plugin<Project> {
     @OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
@@ -32,6 +33,9 @@ class PluginFeature : Plugin<Project> {
             val compose = extensions.getByType(ComposeExtension::class.java).dependencies
 
             extensions.configure<KotlinMultiplatformExtension> {
+				compilerOptions {
+					freeCompilerArgs.set(listOf("-Xcontext-parameters"))
+				}
                 androidTarget {
                     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
                     instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
@@ -65,6 +69,9 @@ class PluginFeature : Plugin<Project> {
                             implementation(compose.material3)
                             implementation(compose.components.resources)
                             implementation(compose.components.uiToolingPreview)
+
+							implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+							implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
                             implementation(libs.findLibrary("kermit").get())
                             implementation(libs.findLibrary("kotlinx.coroutines.core").get())
                             implementation(libs.findLibrary("ktor.client.core").get())
