@@ -1,14 +1,11 @@
-package app.tktn.feature_news.headlines
+package app.tktn.feature_headlines.landing
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
 import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
-import app.tktn.feature_news.headlines.HeadlinesScreenState
 import app.tktn.service_news.domain.entity.NewsArticle
-import app.tktn.service_news.domain.repository.NewsRepository
 import app.tktn.service_news.domain.usecase.GetTopHeadlinesUseCase
 import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 

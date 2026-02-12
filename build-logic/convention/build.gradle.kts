@@ -37,6 +37,6 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.ktorfit.gradlePlugin)
+//    compileOnly(libs.ktorfit.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
 }

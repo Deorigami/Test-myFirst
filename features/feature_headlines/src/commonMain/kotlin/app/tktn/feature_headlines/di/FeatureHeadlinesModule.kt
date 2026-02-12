@@ -1,8 +1,8 @@
-package app.tktn.feature_bookmarks.di
+package app.tktn.feature_headlines.di
 
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 
 @Module
 @ComponentScan("app.tktn")
-class FeatureBookmarksModule
+class FeatureHeadlinesModule

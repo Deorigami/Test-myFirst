@@ -11,3 +11,7 @@ kotlin {
         }
     }
 }
+
+ktorfit {
+	this.compilerPluginVersion.set("2.3.3")
+}

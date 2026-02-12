@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_bookmarks.landing.BookmarkScreen
-import app.tktn.feature_news.headlines.HeadlinesScreen
+import app.tktn.feature_headlines.landing.HeadlinesScreen
 import app.tktn.feature_news.search.SearchScreen
 import kotlinx.coroutines.launch
 

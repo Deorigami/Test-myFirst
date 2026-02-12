@@ -2,7 +2,6 @@ package com.app.plugin.convention
 
 import androidx.room.gradle.RoomExtension
 import com.android.build.gradle.LibraryExtension
-import de.jensklingenberg.ktorfit.gradle.KtorfitPluginExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -33,7 +32,7 @@ class PluginService : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
 				compilerOptions {
-					freeCompilerArgs.set(listOf("-Xcontext-parameters"))
+					freeCompilerArgs.set(listOf("-Xcontext-parameters", "-Xskip-prerelease-check"))
 				}
                 androidTarget {
                     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
@@ -92,9 +91,6 @@ class PluginService : Plugin<Project> {
                     }
                 }
             }
-			extensions.configure<KtorfitPluginExtension> {
-				kotlinVersion.set("2.3.3")
-			}
 			extensions.configure<RoomExtension>(){
 				schemaDirectory("$projectDir/schemas")
 			}

@@ -34,7 +34,7 @@ class PluginFeature : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
 				compilerOptions {
-					freeCompilerArgs.set(listOf("-Xcontext-parameters"))
+					freeCompilerArgs.set(listOf("-Xcontext-parameters", "-Xskip-prerelease-check"))
 				}
                 androidTarget {
                     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html

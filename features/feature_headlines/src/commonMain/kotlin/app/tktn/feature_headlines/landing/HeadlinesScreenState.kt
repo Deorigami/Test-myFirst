@@ -1,4 +1,4 @@
-package app.tktn.feature_news.headlines
+package app.tktn.feature_headlines.landing
 
 import app.tktn.service_news.domain.entity.NewsArticle
 

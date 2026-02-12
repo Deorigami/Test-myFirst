@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.ktorfit
+
 plugins {
 	id("plugin.service")
 }
@@ -8,4 +10,8 @@ kotlin.sourceSets.commonMain.configure {
 	dependencies {
 		implementation(libs.inspektor)
 	}
+}
+
+ktorfit {
+	this.compilerPluginVersion.set("2.3.3")
 }
