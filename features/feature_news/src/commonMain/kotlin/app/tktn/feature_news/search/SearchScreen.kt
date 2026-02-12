@@ -47,7 +47,6 @@ object SearchScreen : BaseScreen() {
 		val viewModel: SearchScreenModel = koinViewModel()
 		val state by viewModel.uiState.collectAsState()
 		val listState = rememberLazyListState()
-		val navStack = LocalNavStack.current
 		val scrollBehavior =
 			TopAppBarDefaults.enterAlwaysScrollBehavior()
 

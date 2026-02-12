@@ -4,15 +4,19 @@ import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
 import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
 import app.tktn.service_news.domain.entity.NewsArticle
+import app.tktn.service_news.domain.usecase.GetCachedHeadlinesUseCase
 import app.tktn.service_news.domain.usecase.GetTopHeadlinesUseCase
 import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
+import co.touchlab.kermit.Logger
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HeadlinesScreenModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
+	private val getCachedTopHeadlinesUseCase: GetCachedHeadlinesUseCase
 ) : BaseScreenModel<HeadlinesScreenState, HeadlinesScreenEvent>(HeadlinesScreenState()) {
 
     init {
@@ -22,11 +26,16 @@ class HeadlinesScreenModel(
 
     private fun observeCache() {
         viewModelScope.launch {
-//            repository.getCachedHeadlines().collectLatest { cached ->
-//                if (currentState.articles.isEmpty() && cached.isNotEmpty()) {
-//                    updateState { it.copy(articles = cached, isOffline = true) }
-//                }
-//            }
+			getCachedTopHeadlinesUseCase(Unit).collectLatest { cached ->
+                if (currentState.articles.isEmpty() && cached.isNotEmpty()) {
+                    updateState { it.copy(articles = cached, isOffline = true) }
+                } else {
+					val updatedCache = cached.mapNotNull { article ->
+						currentState.articles.firstOrNull { it.url == article.url }?.copy(isBookmarked = article.isBookmarked)
+					}
+					updateState { it.copy(articles = updatedCache) }
+				}
+            }
         }
     }
 
@@ -70,16 +79,6 @@ class HeadlinesScreenModel(
     }
 
     private fun toggleBookmark(article: NewsArticle) {
-        toggleBookmarkUseCase.execute(viewModelScope, article) { result ->
-            result.onSuccess {
-                updateState { state ->
-                    val updated = state.articles.map { 
-                        if (it.url == article.url) it.copy(isBookmarked = !it.isBookmarked)
-                        else it
-                    }
-                    state.copy(articles = updated)
-                }
-            }
-        }
+        toggleBookmarkUseCase.execute(viewModelScope, article)
     }
 }

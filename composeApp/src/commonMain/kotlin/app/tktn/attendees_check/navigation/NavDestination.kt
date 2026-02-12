@@ -11,7 +11,7 @@ import androidx.navigationevent.NavigationEvent
 import app.tktn.attendees_check.screen.home.NewsHomeScreen
 import app.tktn.feature_headlines.landing.HeadlinesScreen
 import app.tktn.feature_news.search.SearchScreen
-import app.tktn.feature_news.detail.NewsDetailScreen
+import app.tktn.feature_headlines.detail.NewsDetailScreen
 import app.tktn.attendees_check.screen.splash.SplashScreen
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_bookmarks.landing.BookmarkScreen
