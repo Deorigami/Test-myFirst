@@ -4,6 +4,6 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 
 @Module
-@ComponentScan("app.tktn.feature_news")
+@ComponentScan("app.tktn")
 class FeatureNewsModule {
 }

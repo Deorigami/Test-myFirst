@@ -2,14 +2,19 @@ package app.tktn.feature_news.search
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
+import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
+import app.tktn.feature_news.search.SearchScreenState
 import app.tktn.service_news.domain.entity.NewsArticle
-import app.tktn.service_news.domain.repository.NewsRepository
+import app.tktn.service_news.domain.usecase.SearchNewsParam
+import app.tktn.service_news.domain.usecase.SearchNewsUseCase
+import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class SearchScreenModel(
-    private val repository: NewsRepository
+    private val searchNewsUseCase: SearchNewsUseCase,
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : BaseScreenModel<SearchScreenState, SearchScreenEvent>(SearchScreenState()) {
 
     override fun onEvent(event: SearchScreenEvent) {
@@ -34,39 +39,33 @@ class SearchScreenModel(
         }
 
         viewModelScope.launch {
-            val result = repository.searchNews(currentState.query, nextPage)
-            result.onSuccess { newArticles ->
-                updateState { state ->
-                    val updatedArticles = if (refresh) newArticles else state.articles + newArticles
-                    state.copy(
-                        articles = updatedArticles,
-                        page = nextPage,
-                        isLastPage = newArticles.size < 5,
-                        isLoading = false,
-                        isLoadingNextPage = false
-                    )
-                }
-            }.onFailure { error ->
-                updateState { 
-                    it.copy(
-                        isLoading = false, 
-                        isLoadingNextPage = false,
-                        error = error.message ?: "Unknown error"
-                    ) 
+            searchNewsUseCase.execute(viewModelScope, SearchNewsParam(currentState.query, nextPage)) { result ->
+                result.onSuccess { newArticles ->
+                    updateState { state ->
+                        val updatedArticles = if (refresh) newArticles else state.articles + newArticles
+                        state.copy(
+                            articles = updatedArticles,
+                            page = nextPage,
+                            isLastPage = newArticles.size < 5,
+                            isLoading = false,
+                            isLoadingNextPage = false
+                        )
+                    }
                 }
             }
         }
     }
 
     private fun toggleBookmark(article: NewsArticle) {
-        viewModelScope.launch {
-            repository.toggleBookmark(article)
-            updateState { state ->
-                val updated = state.articles.map { 
-                    if (it.url == article.url) it.copy(isBookmarked = !it.isBookmarked)
-                    else it
+        toggleBookmarkUseCase.execute(viewModelScope, article) { result ->
+            result.onSuccess {
+                updateState { state ->
+                    val updated = state.articles.map { 
+                        if (it.url == article.url) it.copy(isBookmarked = !it.isBookmarked)
+                        else it
+                    }
+                    state.copy(articles = updated)
                 }
-                state.copy(articles = updated)
             }
         }
     }

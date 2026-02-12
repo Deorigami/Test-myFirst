@@ -14,7 +14,7 @@ import org.koin.core.annotation.Single
 import org.koin.core.qualifier.named
 
 @Module
-@ComponentScan("app.tktn.service_news")
+@ComponentScan("app.tktn")
 class ServiceNewsModule {
     @Single
     fun provideNewsApi(ktorfit: Ktorfit): NewsApi = ktorfit.createNewsApi()

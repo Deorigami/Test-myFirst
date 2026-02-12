@@ -2,15 +2,20 @@ package app.tktn.feature_news.headlines
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
+import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
+import app.tktn.feature_news.headlines.HeadlinesScreenState
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.repository.NewsRepository
+import app.tktn.service_news.domain.usecase.GetTopHeadlinesUseCase
+import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HeadlinesScreenModel(
-    private val repository: NewsRepository
+    private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase,
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : BaseScreenModel<HeadlinesScreenState, HeadlinesScreenEvent>(HeadlinesScreenState()) {
 
     init {
@@ -20,11 +25,11 @@ class HeadlinesScreenModel(
 
     private fun observeCache() {
         viewModelScope.launch {
-            repository.getCachedHeadlines().collectLatest { cached ->
-                if (currentState.articles.isEmpty() && cached.isNotEmpty()) {
-                    updateState { it.copy(articles = cached, isOffline = true) }
-                }
-            }
+//            repository.getCachedHeadlines().collectLatest { cached ->
+//                if (currentState.articles.isEmpty() && cached.isNotEmpty()) {
+//                    updateState { it.copy(articles = cached, isOffline = true) }
+//                }
+//            }
         }
     }
 
@@ -49,34 +54,34 @@ class HeadlinesScreenModel(
         }
 
         viewModelScope.launch {
-            val result = repository.getTopHeadlines(nextPage)
-            result.onSuccess { newArticles ->
-                updateState { state ->
-                    val updatedArticles = if (refresh) newArticles else state.articles + newArticles
-                    state.copy(
-                        articles = updatedArticles,
-                        page = nextPage,
-                        isLastPage = newArticles.size < 5,
-                        isLoading = false,
-                        isLoadingNextPage = false,
-                        isOffline = false
-                    )
+            getTopHeadlinesUseCase.execute(viewModelScope, nextPage) { result ->
+                result.onSuccess { newArticles ->
+                    updateState { state ->
+                        val updatedArticles = if (refresh) newArticles else state.articles + newArticles
+                        state.copy(
+                            articles = updatedArticles,
+                            page = nextPage,
+                            isLastPage = newArticles.size < 5,
+                            isLoading = false,
+                            isLoadingNextPage = false,
+                            isOffline = false
+                        )
+                    }
                 }
             }
         }
     }
 
     private fun toggleBookmark(article: NewsArticle) {
-        viewModelScope.launch {
-            repository.toggleBookmark(article)
-            // Update local state if needed, but usually we observe the DB for bookmarks
-            // For Headlines, we might need to manually update the flag if not observing
-            updateState { state ->
-                val updated = state.articles.map { 
-                    if (it.url == article.url) it.copy(isBookmarked = !it.isBookmarked)
-                    else it
+        toggleBookmarkUseCase.execute(viewModelScope, article) { result ->
+            result.onSuccess {
+                updateState { state ->
+                    val updated = state.articles.map { 
+                        if (it.url == article.url) it.copy(isBookmarked = !it.isBookmarked)
+                        else it
+                    }
+                    state.copy(articles = updated)
                 }
-                state.copy(articles = updated)
             }
         }
     }

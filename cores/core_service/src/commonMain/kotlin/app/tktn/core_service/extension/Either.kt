@@ -4,6 +4,7 @@ import app.tktn.core_service.model.DomainResult
 import app.tktn.core_service.model.Error
 import app.tktn.core_service.model.StatefulResponse
 import app.tktn.core_service.model.StatefulResult
+import co.touchlab.kermit.Logger
 
 suspend fun <R> either(block: suspend () -> DomainResult<R>): StatefulResponse<R> = runCatching {
     StatefulResponse.Success(block())
@@ -12,56 +13,54 @@ suspend fun <R> either(block: suspend () -> DomainResult<R>): StatefulResponse<R
 }
 
 fun <T> StatefulResponse<T>.toResult(default: T): StatefulResult<T> {
-    return when {
-
-		// this one is for MASI Test
-
-		this is StatefulResponse.Success && this.data.data != null -> StatefulResult.Success(
+	Logger.d("StatefulResponse") { this.toString() }
+    return when (this) {
+		is StatefulResponse.Success if this.data.data != null -> StatefulResult.Success(
 			data = this.data.data,
 			message = this.data.message ?: "Success",
 			status = data.status,
 			code = 200
 		)
 
-        this is StatefulResponse.Success && this.data.status && this.data.data != null -> {
-            StatefulResult.Success(
-                data = this.data.data,
-                message = this.data.message ?: "Success",
-                status = data.status,
-                code = this.data.code
-            )
-        }
+		is StatefulResponse.Success if this.data.status && this.data.data != null -> {
+			StatefulResult.Success(
+				data = this.data.data,
+				message = this.data.message ?: "Success",
+				status = data.status,
+				code = this.data.code
+			)
+		}
 
-        this is StatefulResponse.Success && !this.data.status -> {
-            StatefulResult.Failed(
-                error = Error(
-                    data.status,
-                    this.data.message,
-                    code = 500
-                )
-            )
-        }
+		is StatefulResponse.Success if !this.data.status -> {
+			StatefulResult.Failed(
+				error = Error(
+					data.status,
+					this.data.message,
+					code = 500
+				)
+			)
+		}
 
-        this is StatefulResponse.Success && this.data.data == null && this.data.status -> StatefulResult.Success(
-            data = default,
-            message = this.data.message ?: "Success",
-            status = data.status,
-            code = this.data.code
-        )
+		is StatefulResponse.Success if this.data.data == null && this.data.status -> StatefulResult.Success(
+			data = default,
+			message = this.data.message ?: "Success",
+			status = data.status,
+			code = this.data.code
+		)
 
-        this is StatefulResponse.Error -> StatefulResult.Failed(this.exception.toError())
-        else -> {
-            val message = (this as? StatefulResponse.Error)?.exception?.message
-                ?: (this as? StatefulResponse.Success)?.data?.message ?: "No Data"
-            StatefulResult.Failed(
-                Error(
-                    false,
-                    message,
-                    code = 500
-                )
-            )
-        }
-    }
+		is StatefulResponse.Error -> StatefulResult.Failed(this.exception.toError())
+		else -> {
+			val message = (this as? StatefulResponse.Error)?.exception?.message
+				?: (this as? StatefulResponse.Success)?.data?.message ?: "No Data"
+			StatefulResult.Failed(
+				Error(
+					false,
+					message,
+					code = 500
+				)
+			)
+		}
+	}
 }
 
 fun Throwable.toError(): Error {
