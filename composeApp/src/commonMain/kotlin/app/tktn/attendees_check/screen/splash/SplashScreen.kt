@@ -9,19 +9,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import app.tktn.attendees_check.navigation.AppModuleNavigation
 import app.tktn.attendees_check.navigation.NavDestinations
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.core_feature.navigation.LocalNavStack
 import kotlinx.coroutines.delay
+import org.koin.compose.koinInject
+import kotlin.time.Duration.Companion.seconds
 
 object SplashScreen : BaseScreen() {
     @Composable
     override fun ComposeContent() {
-        val navStack = LocalNavStack.current
+        val appNavigation = koinInject<AppModuleNavigation>()
 		LaunchedEffect(Unit) {
-			delay(2000)
-			navStack.clear()
-			navStack.add(NavDestinations.NewsHome)
+			delay(1.seconds)
+			appNavigation.navigateToNewsHome()
 		}
 
 		Box(

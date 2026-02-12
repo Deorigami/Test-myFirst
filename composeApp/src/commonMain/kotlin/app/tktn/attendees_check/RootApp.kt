@@ -12,16 +12,12 @@ import app.tktn.core_feature.navigation.LocalNavStack
 @Composable
 internal fun RootApp() {
     AppTheme {
-        CompositionLocalProvider(
-            LocalNavStack provides NavDestinations.backStack
-        ) {
-            NavDisplay(
-                backStack = NavDestinations.backStack,
-                onBack = {
-                    NavDestinations.backStack.removeLastOrNull()
-                },
-                entryProvider = { it.setupNavigation() }
-            )
-        }
+		NavDisplay(
+			backStack = NavDestinations.backStack,
+			onBack = {
+				NavDestinations.backStack.removeLastOrNull()
+			},
+			entryProvider = { it.setupNavigation() }
+		)
     }
 }

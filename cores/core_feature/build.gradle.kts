@@ -9,6 +9,7 @@ kotlin {
 
 		dependencies {
 			implementation(project(":cores:core_service"))
+			api(project(":cores:core_navigation"))
 		}
 	}
 }

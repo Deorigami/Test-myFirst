@@ -15,7 +15,7 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
 //    alias(libs.plugins.hotReload)
     alias(libs.plugins.kotlinx.serialization)
 //    alias(libs.plugins.room)
@@ -81,17 +81,7 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.annotations)
                 implementation(libs.materialKolor)
-				implementation(libs.room.runtime)
-				implementation(libs.room.sqlite)
-                implementation(project(":features:feature_auth"))
-                implementation(project(":features:feature_feed"))
-                implementation(project(":features:feature_util"))
-                implementation(project(":cores:core_feature"))
                 implementation(project(":cores:core_service"))
-                implementation(project(":cores:components"))
-                implementation(project(":features:feature_explore"))
-                implementation(project(":features:feature_profile"))
-                implementation(project(":features:feature_news"))
                 implementation(project(":services:service_news"))
             }
         }
@@ -124,24 +114,15 @@ kotlin {
 }
 
 android {
-    namespace = "app.tktn.attendees_check"
+    namespace = "app.tktn.core_navigation"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 24
         targetSdk = 36
 
-        applicationId = "app.tktn.attendees_check.androidApp"
-        versionCode = 1
-        versionName = "1.0.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-	buildTypes {
-		getByName("release") {
-			signingConfig = signingConfigs.getByName("debug")
-		}
-	}
 }
 
 //https://developer.android.com/develop/ui/compose/testing#setup
@@ -173,18 +154,6 @@ compose.desktop {
     }
 }
 
-//tasks.withType<ComposeHotRun>().configureEach {
-//    mainClass.set("MainKt")
-//}
-
-//buildConfig {
-//    // BuildConfig configuration here.
-//    // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
-//}
-
-//room {
-//    schemaDirectory("$projectDir/schemas")
-//}
 tasks.configureEach {
     if (name.startsWith("ksp") && name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")

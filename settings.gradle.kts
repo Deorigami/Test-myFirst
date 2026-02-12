@@ -45,6 +45,7 @@ include(
     ":services:service_news",
     ":cores:core_feature",
     ":cores:components",
+    ":cores:core_navigation",
     ":cores:core_service",
 )
 includeBuild("build-logic")

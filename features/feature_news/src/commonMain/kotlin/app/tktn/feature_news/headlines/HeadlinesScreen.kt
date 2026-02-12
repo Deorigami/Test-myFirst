@@ -26,7 +26,6 @@ object HeadlinesScreen : BaseScreen() {
         val viewModel: HeadlinesScreenModel = koinViewModel()
         val state by viewModel.uiState.collectAsState()
         val listState = rememberLazyListState()
-        val navStack = LocalNavStack.current
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         // Pagination check
@@ -46,7 +45,7 @@ object HeadlinesScreen : BaseScreen() {
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                LargeTopAppBar(
+                TopAppBar(
                     title = { 
                         Text(
                             "Top Headlines",

@@ -62,14 +62,6 @@ class HeadlinesScreenModel(
                         isOffline = false
                     )
                 }
-            }.onFailure { error ->
-                updateState { 
-                    it.copy(
-                        isLoading = false, 
-                        isLoadingNextPage = false,
-                        error = error.message ?: "Unknown error"
-                    ) 
-                }
             }
         }
     }

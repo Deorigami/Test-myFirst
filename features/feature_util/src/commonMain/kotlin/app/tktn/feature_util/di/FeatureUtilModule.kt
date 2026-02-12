@@ -6,4 +6,5 @@ import org.koin.core.annotation.Module
 @Module
 @ComponentScan("app.tktn")
 class FeatureUtilModule {
+
 }
