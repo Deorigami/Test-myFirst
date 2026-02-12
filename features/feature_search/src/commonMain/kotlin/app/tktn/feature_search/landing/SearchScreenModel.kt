@@ -1,9 +1,8 @@
-package app.tktn.feature_news.search
+package app.tktn.feature_search.landing
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
 import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
-import app.tktn.feature_news.search.SearchScreenState
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.usecase.SearchNewsParam
 import app.tktn.service_news.domain.usecase.SearchNewsUseCase

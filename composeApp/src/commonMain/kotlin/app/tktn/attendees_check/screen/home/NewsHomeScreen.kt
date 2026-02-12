@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_bookmarks.landing.BookmarkScreen
 import app.tktn.feature_headlines.landing.HeadlinesScreen
-import app.tktn.feature_news.search.SearchScreen
+import app.tktn.feature_search.landing.SearchScreen
 import kotlinx.coroutines.launch
 
 object NewsHomeScreen : BaseScreen() {

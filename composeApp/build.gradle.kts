@@ -88,7 +88,6 @@ kotlin {
                 implementation(project(":cores:core_service"))
                 implementation(project(":cores:core_navigation"))
                 implementation(project(":cores:components"))
-                implementation(project(":features:feature_news"))
                 implementation(project(":features:feature_bookmarks"))
                 implementation(project(":features:feature_search"))
                 implementation(project(":features:feature_headlines"))

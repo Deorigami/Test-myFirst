@@ -1,4 +1,4 @@
-package app.tktn.feature_news.search
+package app.tktn.feature_search.landing
 
 //import app.tktn.attendees_check.navigation.NavDestinations
 import androidx.compose.foundation.layout.Box
@@ -17,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -35,9 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
-import app.tktn.core_feature.navigation.LocalNavStack
-import app.tktn.feature_news.composable.NewsArticleItem
+import app.tktn.feature_search.di.FeatureSearchNavigation
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,8 +47,9 @@ object SearchScreen : BaseScreen() {
 		val viewModel: SearchScreenModel = koinViewModel()
 		val state by viewModel.uiState.collectAsState()
 		val listState = rememberLazyListState()
-		val scrollBehavior =
-			TopAppBarDefaults.enterAlwaysScrollBehavior()
+		val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+		val navigation = koinInject<FeatureSearchNavigation>()
+
 
 		val shouldLoadMore = remember {
 			derivedStateOf {
@@ -141,9 +142,8 @@ object SearchScreen : BaseScreen() {
 								state.articles,
 								key = { it.url }) { article ->
 								NewsArticleItem(
-									article = article,
 									onClick = {
-//										navStack.add(NavDestinations.NewsDetail(article))
+										navigation.navigateToNewsDetail(article)
 									},
 									onBookmarkClick = {
 										viewModel.onEvent(
@@ -151,7 +151,15 @@ object SearchScreen : BaseScreen() {
 												article
 											)
 										)
-									}
+									},
+									title = article.title,
+									author = article.author,
+									description = article.description,
+									url = article.url,
+									urlToImage = article.urlToImage,
+									publishedAt = article.publishedAt,
+									content = article.content,
+									isBookmarked = article.isBookmarked,
 								)
 							}
 

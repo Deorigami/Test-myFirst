@@ -37,7 +37,6 @@ include(
     ":composeApp",
 
     ":features:feature_util",
-    ":features:feature_news",
     ":features:feature_headlines",
     ":features:feature_bookmarks",
     ":features:feature_search",

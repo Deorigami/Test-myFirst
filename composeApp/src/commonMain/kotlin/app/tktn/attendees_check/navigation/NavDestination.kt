@@ -10,7 +10,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
 import app.tktn.attendees_check.screen.home.NewsHomeScreen
 import app.tktn.feature_headlines.landing.HeadlinesScreen
-import app.tktn.feature_news.search.SearchScreen
+import app.tktn.feature_search.landing.SearchScreen
 import app.tktn.feature_headlines.detail.NewsDetailScreen
 import app.tktn.attendees_check.screen.splash.SplashScreen
 import app.tktn.core_feature.base.BaseScreen
