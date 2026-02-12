@@ -27,7 +27,6 @@ object HeadlinesScreen : BaseScreen() {
         val state by viewModel.uiState.collectAsState()
         val listState = rememberLazyListState()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
         // Pagination check
         val shouldLoadMore = remember {
             derivedStateOf {
@@ -95,8 +94,8 @@ object HeadlinesScreen : BaseScreen() {
                         items(state.articles, key = { it.url }) { article ->
                             NewsArticleItem(
                                 article = article,
-                                onClick = { 
-//                                    navStack.add(NavDestinations.NewsDetail(article))
+                                onClick = {
+
                                 },
                                 onBookmarkClick = {
                                     viewModel.onEvent(HeadlinesScreenEvent.ToggleBookmark(article))

@@ -35,14 +35,15 @@ plugins {
 
 include(
     ":composeApp",
-    ":features:feature_auth",
-	":features:feature_feed",
+
     ":features:feature_util",
-    ":features:feature_explore",
-    ":features:feature_profile",
     ":features:feature_news",
-    ":services:service_feed",
+    ":features:feature_headlines",
+    ":features:feature_bookmarks",
+    ":features:feature_search",
+
     ":services:service_news",
+
     ":cores:core_feature",
     ":cores:components",
     ":cores:core_navigation",

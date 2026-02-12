@@ -17,7 +17,7 @@ class NewsRepositoryImpl(
 ) : NewsRepository {
 
 	private val apiKey =
-		"911e30a5975d4a6f95d1377759868770" // I'll use this for now as a default for testing, but should be configurable
+		"79a1436988f44403a63332db5b80c840" // I'll use this for now as a default for testing, but should be configurable
 
 	override suspend fun getTopHeadlines(page: Int): DomainResult<List<NewsArticle>> {
 		val response = api.getTopHeadlines(page = page, apiKey = apiKey)

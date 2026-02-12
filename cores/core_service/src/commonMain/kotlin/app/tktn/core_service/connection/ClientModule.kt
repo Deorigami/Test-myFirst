@@ -1,6 +1,7 @@
 package app.tktn.core_service.connection
 
 import de.jensklingenberg.ktorfit.Ktorfit
+import io.github.orioneee.Axer
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -13,12 +14,15 @@ import org.koin.core.annotation.Single
 @ComponentScan("app.tktn")
 class ServiceModule {
 	@Single
-	fun provideKtorfit() : Ktorfit = Ktorfit.Builder()
+	fun provideKtorfit(): Ktorfit = Ktorfit.Builder()
 		.baseUrl("https://newsapi.org/")
 		.httpClient(HttpClient {
 			install(ContentNegotiation) {
-				json(Json { isLenient = true; ignoreUnknownKeys = true })
+				json(Json {
+					isLenient = true; ignoreUnknownKeys = true
+				})
 			}
+			install(Axer.ktorPlugin)
 		})
 		.build()
 }

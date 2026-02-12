@@ -3,6 +3,7 @@
 camerak = "0.1.0"
 faceDetection = "16.1.7"
 hazeMaterials = "2.0.0"
+inspektor = "1.2.5"
 room = "2.8.4"
 koinAnnotationsBom = "2.3.1"
 koinBom = "4.1.1"
@@ -42,6 +43,7 @@ compose-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive
 android-faceDetection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }
+inspektor = { module = "io.github.orioneee:axer", version.ref = "inspektor" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 composeMediaPlayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composeMediaPlayer" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }

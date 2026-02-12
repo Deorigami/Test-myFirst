@@ -83,16 +83,17 @@ kotlin {
                 implementation(libs.materialKolor)
 				implementation(libs.room.runtime)
 				implementation(libs.room.sqlite)
-                implementation(project(":features:feature_auth"))
-                implementation(project(":features:feature_feed"))
                 implementation(project(":features:feature_util"))
                 implementation(project(":cores:core_feature"))
                 implementation(project(":cores:core_service"))
+                implementation(project(":cores:core_navigation"))
                 implementation(project(":cores:components"))
-                implementation(project(":features:feature_explore"))
-                implementation(project(":features:feature_profile"))
                 implementation(project(":features:feature_news"))
+                implementation(project(":features:feature_bookmarks"))
+                implementation(project(":features:feature_search"))
+                implementation(project(":features:feature_headlines"))
                 implementation(project(":services:service_news"))
+				implementation(libs.inspektor)
             }
         }
 
