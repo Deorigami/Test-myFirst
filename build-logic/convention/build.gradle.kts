@@ -38,4 +38,5 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.ktorfit.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
 }

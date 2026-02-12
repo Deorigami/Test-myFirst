@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import app.tktn.attendees_check.di.RootAppModule
+import app.tktn.attendees_check.di.roomDatabaseModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
 
@@ -13,7 +15,8 @@ class MyApp : Application(){
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            modules(RootAppModule().module)
+            androidContext(this@MyApp)
+            modules(RootAppModule().module, roomDatabaseModule)
         }
     }
 }

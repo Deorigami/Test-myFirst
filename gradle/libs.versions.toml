@@ -3,6 +3,7 @@
 camerak = "0.1.0"
 faceDetection = "16.1.7"
 hazeMaterials = "2.0.0"
+room = "2.8.4"
 koinAnnotationsBom = "2.3.1"
 koinBom = "4.1.1"
 kotlin = "2.3.0"
@@ -99,6 +100,7 @@ kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 ktorfit-gradlePlugin = { module = "de.jensklingenberg.ktorfit:ktorfit-gradle-plugin", version.ref = "ktorfit" }
+room-gradlePlugin = { module = "androidx.room:room-gradle-plugin", version.ref = "room" }
 
 
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
@@ -108,6 +110,10 @@ multiplatformSettings-coroutines = { module = "com.russhwolf:multiplatform-setti
 compass-geolocation = { module = "dev.jordond.compass:geolocation", version.ref = "compass" }
 compass-permissions-mobile = { module = "dev.jordond.compass:permissions-mobile", version.ref = "compass" }
 compass-geolocation-mobile = { module = "dev.jordond.compass:geolocation-mobile", version.ref = "compass" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-sqlite = { module = "androidx.sqlite:sqlite-bundled", version = "2.6.2" }
 
 
 [plugins]
@@ -122,6 +128,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotReload"}
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 supabase = [

@@ -1,5 +1,6 @@
 package com.app.plugin.convention
 
+import androidx.room.gradle.RoomExtension
 import com.android.build.gradle.LibraryExtension
 import de.jensklingenberg.ktorfit.gradle.KtorfitPluginExtension
 import org.gradle.api.JavaVersion
@@ -27,6 +28,7 @@ class PluginService : Plugin<Project> {
                 apply(libs.findPlugin("ktorfit").get().get().pluginId)
                 apply(libs.findPlugin("kotlinx.serialization").get().get().pluginId)
                 apply(libs.findPlugin("ksp").get().get().pluginId)
+                apply(libs.findPlugin("room").get().get().pluginId)
             }
 
             extensions.configure<KotlinMultiplatformExtension> {
@@ -39,11 +41,6 @@ class PluginService : Plugin<Project> {
                 }
 
                 jvm()
-
-                wasmJs {
-                    browser()
-                    binaries.executable()
-                }
 
                 listOf(
                     iosX64(),
@@ -78,6 +75,8 @@ class PluginService : Plugin<Project> {
                             implementation(project.dependencies.platform(libs.findLibrary("koin.annotations.bom").get()))
                             implementation(libs.findLibrary("koin.core").get())
                             implementation(libs.findLibrary("koin.annotations").get())
+                            implementation(libs.findLibrary("room.runtime").get())
+                            implementation(libs.findLibrary("room.sqlite").get())
                         }
                     }
                     androidMain.dependencies {
@@ -95,6 +94,9 @@ class PluginService : Plugin<Project> {
             }
 			extensions.configure<KtorfitPluginExtension> {
 				kotlinVersion.set("2.3.3")
+			}
+			extensions.configure<RoomExtension>(){
+				schemaDirectory("$projectDir/schemas")
 			}
             extensions.configure<LibraryExtension> {
                 compileSdk = 36

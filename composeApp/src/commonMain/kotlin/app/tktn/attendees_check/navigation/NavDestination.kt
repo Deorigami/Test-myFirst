@@ -9,7 +9,14 @@ import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
 import app.tktn.attendees_check.screen.home.HomeScreen
+import app.tktn.feature_news.NewsHomeScreen
+import app.tktn.feature_news.headlines.HeadlinesScreen
+import app.tktn.feature_news.search.SearchScreen
+import app.tktn.feature_news.bookmark.BookmarkScreen
+import app.tktn.feature_news.detail.NewsDetailScreen
+import app.tktn.attendees_check.screen.splash.SplashScreen
 import app.tktn.core_feature.base.BaseScreen
+import app.tktn.service_news.domain.entity.NewsArticle
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,9 +26,33 @@ sealed interface NavDestinations : NavKey, NavDestinationScreen {
 		override fun getScreen(): BaseScreen = HomeScreen
 	}
 
+    data object NewsSplash : NavDestinations {
+        override fun getScreen(): BaseScreen = SplashScreen
+    }
+
+    data object NewsHome : NavDestinations {
+        override fun getScreen(): BaseScreen = NewsHomeScreen
+    }
+
+    data object Headlines : NavDestinations {
+        override fun getScreen(): BaseScreen = HeadlinesScreen
+    }
+
+    data object Search : NavDestinations {
+        override fun getScreen(): BaseScreen = SearchScreen
+    }
+
+    data object Bookmark : NavDestinations {
+        override fun getScreen(): BaseScreen = BookmarkScreen
+    }
+
+    data class NewsDetail(val article: NewsArticle) : NavDestinations {
+        override fun getScreen(): BaseScreen = NewsDetailScreen(article)
+    }
+
 	companion object {
 		var backStack: SnapshotStateList<NavDestinations> =
-			mutableStateListOf<NavDestinations>(Home)
+			mutableStateListOf<NavDestinations>(NewsSplash)
 	}
 }
 

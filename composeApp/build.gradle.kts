@@ -31,11 +31,6 @@ kotlin {
 
     jvm()
 
-    wasmJs {
-        browser()
-        binaries.executable()
-    }
-
     listOf(
         iosX64(),
         iosArm64(),
@@ -86,15 +81,18 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.annotations)
                 implementation(libs.materialKolor)
-
+				implementation(libs.room.runtime)
+				implementation(libs.room.sqlite)
                 implementation(project(":features:feature_auth"))
                 implementation(project(":features:feature_feed"))
                 implementation(project(":features:feature_util"))
                 implementation(project(":cores:core_feature"))
                 implementation(project(":cores:core_service"))
                 implementation(project(":cores:components"))
-				implementation(project(":features:feature_explore"))
-				implementation(project(":features:feature_profile"))
+                implementation(project(":features:feature_explore"))
+                implementation(project(":features:feature_profile"))
+                implementation(project(":features:feature_news"))
+                implementation(project(":services:service_news"))
             }
         }
 
@@ -210,6 +208,10 @@ dependencies {
 //    }
 
     add("kspCommonMainMetadata", libs.koin.annotations.ksp)
+	add("kspAndroid", libs.room.compiler)
+	add("kspIosSimulatorArm64", libs.room.compiler)
+	add("kspIosX64", libs.room.compiler)
+	add("kspIosArm64", libs.room.compiler)
 }
 
 

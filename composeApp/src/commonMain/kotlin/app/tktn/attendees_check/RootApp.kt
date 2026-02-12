@@ -13,7 +13,7 @@ import app.tktn.core_feature.navigation.LocalNavStack
 internal fun RootApp() {
     AppTheme {
         CompositionLocalProvider(
-            LocalNavStack provides NavDestinations.backStack.toList().toMutableStateList()
+            LocalNavStack provides NavDestinations.backStack
         ) {
             NavDisplay(
                 backStack = NavDestinations.backStack,

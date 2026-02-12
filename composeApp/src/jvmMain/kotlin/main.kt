@@ -5,6 +5,7 @@ import androidx.compose.ui.window.rememberWindowState
 import java.awt.Dimension
 import app.tktn.attendees_check.RootApp
 import app.tktn.attendees_check.di.RootAppModule
+import app.tktn.service_news.newsPlatformModule
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
 
