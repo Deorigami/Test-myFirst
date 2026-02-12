@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 
 @Composable
 fun NewsArticleItem(
@@ -44,17 +45,15 @@ fun NewsArticleItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column {
-            urlToImage?.let { imageUrl ->
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
+			SubcomposeAsyncImage(
+				model = urlToImage ?: "https://placehold.co/600x400?text=No+Image",
+				contentDescription = null,
+				modifier = Modifier
+					.fillMaxWidth()
+					.height(220.dp)
+					.clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
+				contentScale = ContentScale.Crop
+			)
             
             Column(modifier = Modifier.padding(20.dp)) {
                 Row(
@@ -106,13 +105,14 @@ fun NewsArticleItem(
                 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
                         text = author ?: "Unknown Source",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+						modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = publishedAt.take(10),

@@ -1,4 +1,4 @@
-package app.tktn.attendees_check.di
+package app.tktn.attendees_check.db
 
 import androidx.room.RoomDatabaseConstructor
 

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_headlines.di.FeatureHeadlinesNavigation
+import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,10 +50,12 @@ object HeadlinesScreen : BaseScreen() {
 		val scrollBehavior =
 			TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 		// Pagination check
+		LaunchedEffect(state, listState){
+			Logger.d("LaunchedEffect(state)"){ "IsLastPage : ${state.isLastPage} | isLoading : ${state.isLoading} | isLoadingNextPage : ${state.isLoadingNextPage} | lastVisibleItemIndex : ${listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index}" }
+		}
 		val shouldLoadMore by remember {
 			derivedStateOf {
-				val lastVisibleItemIndex =
-					listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+				val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
 						?: 0
 				lastVisibleItemIndex >= state.articles.size - 1 && !state.isLastPage && !state.isLoadingNextPage && !state.isLoading
 			}
@@ -60,6 +63,7 @@ object HeadlinesScreen : BaseScreen() {
 		val navigation = koinInject<FeatureHeadlinesNavigation>()
 
 		LaunchedEffect(shouldLoadMore) {
+			Logger.d("LaunchedEffect(shouldLoadMore)") { shouldLoadMore.toString() }
 			if (shouldLoadMore) {
 				viewModel.onEvent(HeadlinesScreenEvent.LoadNextPage)
 			}

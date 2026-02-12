@@ -14,3 +14,5 @@ xcuserdata/
 Pods/
 *.jks
 *yarn.lock
+/build_err.txt
+/build_output.txt

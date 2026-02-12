@@ -57,7 +57,7 @@ object NewsHomeScreen : BaseScreen() {
 			HorizontalPager(
 				state = pagerState,
 				modifier = Modifier.fillMaxSize()
-					.padding(paddingValues)
+					.padding(bottom = paddingValues.calculateBottomPadding())
 			) { page ->
 				when (page) {
 					0 -> HeadlinesScreen.ComposableScreen()

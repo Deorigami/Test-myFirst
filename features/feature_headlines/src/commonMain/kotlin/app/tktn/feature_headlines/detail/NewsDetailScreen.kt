@@ -99,33 +99,34 @@ data class NewsDetailScreen(val article: NewsArticle) : BaseScreen() {
 					AsyncImage(
 						model = it,
 						contentDescription = null,
-						modifier = Modifier.Companion.fillMaxWidth()
+						modifier = Modifier.fillMaxWidth()
 							.height(250.dp),
-						contentScale = ContentScale.Companion.Crop
+						contentScale = ContentScale.Crop
 					)
 				}
 
-				Column(modifier = Modifier.Companion.padding(16.dp)) {
+				Column(modifier = Modifier.padding(16.dp)) {
 					Text(
 						text = article.title,
 						style = MaterialTheme.typography.headlineSmall,
-						fontWeight = FontWeight.Companion.Bold
+						fontWeight = FontWeight.Bold
 					)
 
-					Spacer(modifier = Modifier.Companion.height(8.dp))
+					Spacer(modifier = Modifier.height(8.dp))
 
-					Row(modifier = Modifier.Companion.fillMaxWidth()) {
+					Row(modifier = Modifier.fillMaxWidth()) {
 						Text(
 							text = article.author ?: "Unknown",
 							style = MaterialTheme.typography.labelMedium,
-							color = MaterialTheme.colorScheme.primary
+							color = MaterialTheme.colorScheme.primary,
+							modifier = Modifier.weight(1f)
 						)
-						Spacer(modifier = Modifier.Companion.width(8.dp))
+						Spacer(modifier = Modifier.width(8.dp))
 						Text(
 							text = "·",
 							style = MaterialTheme.typography.labelMedium
 						)
-						Spacer(modifier = Modifier.Companion.width(8.dp))
+						Spacer(modifier = Modifier.width(8.dp))
 						Text(
 							text = article.publishedAt,
 							style = MaterialTheme.typography.labelMedium,
@@ -133,15 +134,15 @@ data class NewsDetailScreen(val article: NewsArticle) : BaseScreen() {
 						)
 					}
 
-					Spacer(modifier = Modifier.Companion.height(16.dp))
+					Spacer(modifier = Modifier.height(16.dp))
 
 					Text(
 						text = article.description ?: "",
 						style = MaterialTheme.typography.bodyLarge,
-						fontWeight = FontWeight.Companion.Medium
+						fontWeight = FontWeight.Medium
 					)
 
-					Spacer(modifier = Modifier.Companion.height(16.dp))
+					Spacer(modifier = Modifier.height(16.dp))
 
 					Text(
 						text = article.content ?: "",

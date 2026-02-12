@@ -92,8 +92,11 @@ kotlin {
                 implementation(project(":features:feature_search"))
                 implementation(project(":features:feature_headlines"))
                 implementation(project(":services:service_news"))
+                implementation(project(":services:service_news"))
 				implementation(libs.inspektor)
-            }
+				implementation(libs.connectivity.core)
+				implementation(libs.connectivity.http)
+			}
         }
 
         commonTest.dependencies {

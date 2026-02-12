@@ -7,34 +7,41 @@ import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.usecase.GetCachedHeadlinesUseCase
 import app.tktn.service_news.domain.usecase.GetTopHeadlinesUseCase
 import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+
+import app.tktn.core_feature.connectivity.ConnectivityViewModel
 
 @KoinViewModel
 class HeadlinesScreenModel(
     private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase,
     private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
-	private val getCachedTopHeadlinesUseCase: GetCachedHeadlinesUseCase
+	private val getCachedTopHeadlinesUseCase: GetCachedHeadlinesUseCase,
+    private val connectivityViewModel: ConnectivityViewModel
 ) : BaseScreenModel<HeadlinesScreenState, HeadlinesScreenEvent>(HeadlinesScreenState()) {
 
     init {
+        observeConnectivity()
         observeCache()
-        onEvent(HeadlinesScreenEvent.LoadHeadlines)
+    }
+
+    private fun observeConnectivity() {
+        viewModelScope.launch {
+            connectivityViewModel.isConnectedFlow.collectLatest { isConnected ->
+                if (isConnected) {
+                    onEvent(HeadlinesScreenEvent.LoadHeadlines)
+                } else {
+                    updateState { it.copy(isOffline = true) }
+                }
+            }
+        }
     }
 
     private fun observeCache() {
         viewModelScope.launch {
-			getCachedTopHeadlinesUseCase(Unit).collectLatest { cached ->
-                if (currentState.articles.isEmpty() && cached.isNotEmpty()) {
-                    updateState { it.copy(articles = cached, isOffline = true) }
-                } else {
-					val updatedCache = cached.mapNotNull { article ->
-						currentState.articles.firstOrNull { it.url == article.url }?.copy(isBookmarked = article.isBookmarked)
-					}
-					updateState { it.copy(articles = updatedCache) }
-				}
+            getCachedTopHeadlinesUseCase(Unit).collectLatest { cached ->
+                updateState { it.copy(articles = cached) }
             }
         }
     }
@@ -51,6 +58,11 @@ class HeadlinesScreenModel(
     private fun loadHeadlines(refresh: Boolean) {
         if (currentState.isLoading || currentState.isLoadingNextPage) return
         if (!refresh && currentState.isLastPage) return
+
+        if (!connectivityViewModel.isConnectedFlow.value) {
+            updateState { it.copy(isOffline = true, isLoading = false, isLoadingNextPage = false) }
+            return
+        }
 
         val nextPage = if (refresh) 1 else currentState.page + 1
 

@@ -36,6 +36,8 @@ navigation3Event = "1.0.0-rc02"
 androidxNavigation3Material = "1.3.0-alpha03"
 composeMediaPlayer = "0.8.7"
 
+connectivity = "2.4.1"
+
 [libraries]
 
 camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
@@ -116,6 +118,12 @@ compass-geolocation-mobile = { module = "dev.jordond.compass:geolocation-mobile"
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-sqlite = { module = "androidx.sqlite:sqlite-bundled", version = "2.6.2" }
+
+connectivity-core = { module = "dev.jordond.connectivity:connectivity-core", version.ref = "connectivity" }
+connectivity-device = { module = "dev.jordond.connectivity:connectivity-device", version.ref = "connectivity" }
+connectivity-http = { module = "dev.jordond.connectivity:connectivity-http", version.ref = "connectivity" }
+connectivity-compose-device = { module = "dev.jordond.connectivity:connectivity-compose-device", version.ref = "connectivity" }
+connectivity-compose-http = { module = "dev.jordond.connectivity:connectivity-compose-http", version.ref = "connectivity" }
 
 
 [plugins]
