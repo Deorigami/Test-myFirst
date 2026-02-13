@@ -1,6 +1,5 @@
 package app.tktn.feature_search.landing
 
-//import app.tktn.attendees_check.navigation.NavDestinations
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,151 +39,206 @@ import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_search.di.FeatureSearchNavigation
+import app.tktn.service_news.domain.entity.NewsArticle
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 object SearchScreen : BaseScreen() {
-	@Composable
-	override fun ComposeContent() {
-		val viewModel: SearchScreenModel = koinViewModel()
-		val state by viewModel.uiState.collectAsState()
-		val listState = rememberLazyListState()
-		val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-		val navigation = koinInject<FeatureSearchNavigation>()
+    @Composable
+    override fun ComposeContent() {
+        val viewModel: SearchScreenModel = koinViewModel()
+        val state by viewModel.uiState.collectAsState()
+        val listState = rememberLazyListState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val navigation = koinInject<FeatureSearchNavigation>()
 
+        SearchScreenContent(
+            state = state,
+            listState = listState,
+            scrollBehavior = scrollBehavior,
+            onEvent = viewModel::onEvent,
+            onNavigateToDetail = { article -> navigation.navigateToNewsDetail(article) }
+        )
+    }
+}
 
-		val shouldLoadMore = remember {
-			derivedStateOf {
-				val lastVisibleItemIndex =
-					listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-						?: 0
-				lastVisibleItemIndex >= state.articles.size - 1 && !state.isLastPage && !state.isLoadingNextPage && !state.isLoading
-			}
-		}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchScreenContent(
+    state: SearchScreenState,
+    listState: LazyListState,
+    scrollBehavior: TopAppBarScrollBehavior,
+    onEvent: (SearchScreenEvent) -> Unit,
+    onNavigateToDetail: (NewsArticle) -> Unit
+) {
+    val shouldLoadMore = remember(listState) {
+        derivedStateOf {
+            val lastVisibleItemIndex =
+                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleItemIndex >= state.articles.size - 1 && !state.isLastPage && !state.isLoadingNextPage && !state.isLoading
+        }
+    }
 
-		LaunchedEffect(shouldLoadMore.value) {
-			if (shouldLoadMore.value) {
-				viewModel.onEvent(SearchScreenEvent.LoadNextPage)
-			}
-		}
+    LaunchedEffect(shouldLoadMore.value) {
+        if (shouldLoadMore.value) {
+            onEvent(SearchScreenEvent.LoadNextPage)
+        }
+    }
 
-		Scaffold(
-			modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-			topBar = {
-				TopAppBar(
-					title = {
-						Text(
-							"Search",
-							fontWeight = FontWeight.Black,
-							modifier = Modifier.padding(horizontal = 8.dp)
-						)
-					},
-					scrollBehavior = scrollBehavior
-				)
-			}
-		) { paddingValues ->
-			Column(
-				modifier = Modifier.fillMaxSize()
-					.padding(paddingValues)
-			) {
-				OutlinedTextField(
-					value = state.query,
-					onValueChange = {
-						viewModel.onEvent(
-							SearchScreenEvent.UpdateQuery(it)
-						)
-					},
-					modifier = Modifier.fillMaxWidth().padding(16.dp),
-					placeholder = { Text("Search news topics...") },
-					shape = MaterialTheme.shapes.large,
-					leadingIcon = {
-						Icon(
-							Icons.Default.Search,
-							contentDescription = null
-						)
-					},
-					trailingIcon = {
-						if (state.query.isNotEmpty()) {
-							Button(
-								onClick = {
-									viewModel.onEvent(
-										SearchScreenEvent.Search
-									)
-								},
-								modifier = Modifier.padding(end = 4.dp),
-								shape = MaterialTheme.shapes.medium
-							) {
-								Text("Go")
-							}
-						}
-					},
-					singleLine = true
-				)
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = { SearchTopBar(scrollBehavior) }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            SearchBar(
+                query = state.query,
+                onQueryChange = { onEvent(SearchScreenEvent.UpdateQuery(it)) },
+                onSearchClick = { onEvent(SearchScreenEvent.Search) }
+            )
 
-				Box(modifier = Modifier.fillMaxSize()) {
-					if (state.isLoading && state.articles.isEmpty()) {
-						CircularProgressIndicator(
-							modifier = Modifier.align(
-								Alignment.Center
-							)
-						)
-					} else if (state.articles.isEmpty() && state.query.isNotEmpty() && !state.isLoading) {
-						Text(
-							"No results found",
-							modifier = Modifier.align(Alignment.Center),
-							style = MaterialTheme.typography.bodyLarge
-						)
-					} else {
-						LazyColumn(
-							state = listState,
-							modifier = Modifier.fillMaxSize(),
-							contentPadding = PaddingValues(bottom = 16.dp)
-						) {
-							items(
-								state.articles,
-								key = { it.url }) { article ->
-								NewsArticleItem(
-									onClick = {
-										navigation.navigateToNewsDetail(article)
-									},
-									onBookmarkClick = {
-										viewModel.onEvent(
-											SearchScreenEvent.ToggleBookmark(
-												article
-											)
-										)
-									},
-									title = article.title,
-									author = article.author,
-									description = article.description,
-									url = article.url,
-									urlToImage = article.urlToImage,
-									publishedAt = article.publishedAt.toFormattedDate(),
-									content = article.content,
-									isBookmarked = article.isBookmarked,
-								)
-							}
+            SearchContent(
+                isLoading = state.isLoading,
+                articles = state.articles,
+                query = state.query,
+                isLoadingNextPage = state.isLoadingNextPage,
+                listState = listState,
+                onNavigateToDetail = onNavigateToDetail,
+                onBookmarkClick = { article -> onEvent(SearchScreenEvent.ToggleBookmark(article)) }
+            )
+        }
+    }
+}
 
-							if (state.isLoadingNextPage) {
-								item {
-									Box(
-										modifier = Modifier.fillMaxWidth()
-											.padding(16.dp),
-										contentAlignment = Alignment.Center
-									) {
-										CircularProgressIndicator(
-											modifier = Modifier.size(
-												24.dp
-											)
-										)
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+    TopAppBar(
+        title = {
+            Text(
+                "Search",
+                fontWeight = FontWeight.Black,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+@Composable
+private fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearchClick: () -> Unit
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        placeholder = { Text("Search news topics...") },
+        shape = MaterialTheme.shapes.large,
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = null
+            )
+        },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                Button(
+                    onClick = onSearchClick,
+                    modifier = Modifier.padding(end = 4.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text("Go")
+                }
+            }
+        },
+        singleLine = true
+    )
+}
+
+@Composable
+private fun SearchContent(
+    isLoading: Boolean,
+    articles: List<NewsArticle>,
+    query: String,
+    isLoadingNextPage: Boolean,
+    listState: LazyListState,
+    onNavigateToDetail: (NewsArticle) -> Unit,
+    onBookmarkClick: (NewsArticle) -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (isLoading && articles.isEmpty()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else if (articles.isEmpty() && query.isNotEmpty() && !isLoading) {
+            Text(
+                "No results found",
+                modifier = Modifier.align(Alignment.Center),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        } else {
+            ArticleList(
+                articles = articles,
+                listState = listState,
+                isLoadingNextPage = isLoadingNextPage,
+                onNavigateToDetail = onNavigateToDetail,
+                onBookmarkClick = onBookmarkClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun ArticleList(
+    articles: List<NewsArticle>,
+    listState: LazyListState,
+    isLoadingNextPage: Boolean,
+    onNavigateToDetail: (NewsArticle) -> Unit,
+    onBookmarkClick: (NewsArticle) -> Unit
+) {
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
+        items(
+            items = articles,
+            key = { it.url }
+        ) { article ->
+            NewsArticleItem(
+                onClick = { onNavigateToDetail(article) },
+                onBookmarkClick = { onBookmarkClick(article) },
+                title = article.title,
+                author = article.author,
+                description = article.description,
+                url = article.url,
+                urlToImage = article.urlToImage,
+                publishedAt = article.publishedAt.toFormattedDate(),
+                content = article.content,
+                isBookmarked = article.isBookmarked,
+            )
+        }
+
+        if (isLoadingNextPage) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                }
+            }
+        }
+    }
 }
