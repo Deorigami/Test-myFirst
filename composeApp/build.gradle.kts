@@ -102,7 +102,7 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
+            implementation("org.jetbrains.compose.ui:ui-test:1.10.1")
             implementation(libs.kotlinx.coroutines.test)
         }
 

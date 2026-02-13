@@ -50,7 +50,7 @@ The project is built with a focus on **Separation of Concerns** and **Scalabilit
 Beyond the core requirements, this project includes several "nice-to-have" features to demonstrate professional proficiency:
 - **Advanced Networking**: Uses **Ktor** and **Ktorfit** for type-safe API requests, providing an experience similar to Retrofit but with multiplatform support.
 - **Dependency Injection**: Fully integrated with **Koin Annotations** and **KSP** for robust, compile-time checked dependency management.
-- **Testing**: Includes **Unit Tests** for core business logic and **Instrumentation Tests** (using Compose UI Test) to verify feature stability and navigation flows.
+- **Testing**: Includes **Unit Tests** for core business logic (Repository and Use Cases) and **Instrumentation/UI Tests** (using Compose UI Test) for core components like `NewsArticleItem` to ensure UI stability and event handling.
 
 ## �🚀 Getting Started
 
