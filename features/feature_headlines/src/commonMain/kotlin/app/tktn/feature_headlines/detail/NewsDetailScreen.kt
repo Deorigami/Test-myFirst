@@ -24,11 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -37,24 +34,19 @@ import app.tktn.core_feature.base.BaseScreen
 import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_headlines.di.FeatureHeadlinesNavigation
 import app.tktn.service_news.domain.entity.NewsArticle
-import app.tktn.service_news.domain.repository.NewsRepository
 import coil3.compose.AsyncImage
-import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 data class NewsDetailScreen(val article: NewsArticle) : BaseScreen() {
 
     @OptIn(ExperimentalMaterial3Api::class)
 	@Composable
     override fun ComposeContent() {
-        val repository: NewsRepository = koinInject()
-        val scope = rememberCoroutineScope()
-        var isBookmarked by remember { mutableStateOf(article.isBookmarked) }
+        val viewModel: NewsDetailScreenModel = koinViewModel { parametersOf(article) }
+        val state by viewModel.uiState.collectAsState()
 		val navigation = koinInject<FeatureHeadlinesNavigation>()
-        // Ensure bookmark state is consistent with DB
-		LaunchedEffect(article.url) {
-			isBookmarked = repository.isBookmarked(article.url)
-		}
 
 		Scaffold(
 			topBar = {
@@ -75,15 +67,12 @@ data class NewsDetailScreen(val article: NewsArticle) : BaseScreen() {
 					},
 					actions = {
 						IconButton(onClick = {
-							scope.launch {
-								repository.toggleBookmark(article)
-								isBookmarked = !isBookmarked
-							}
+							viewModel.onEvent(NewsDetailScreenEvent.ToggleBookmark(article))
 						}) {
 							Icon(
-								imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+								imageVector = if (state.isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
 								contentDescription = "Toggle Bookmark",
-								tint = if (isBookmarked) MaterialTheme.colorScheme.primary else LocalContentColor.current
+								tint = if (state.isBookmarked) MaterialTheme.colorScheme.primary else LocalContentColor.current
 							)
 						}
 					}
