@@ -5,6 +5,7 @@ import app.tktn.core_feature.base.BaseScreenModel
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.usecase.ObserveBookmarkStatusUseCase
 import app.tktn.service_news.domain.usecase.ToggleBookmarkUseCase
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -23,6 +24,7 @@ class NewsDetailScreenModel(
 
 	init {
 		init()
+		Logger.d("DetailScreen"){ "Article: ${article.url}" }
 	}
 
     private fun init() {

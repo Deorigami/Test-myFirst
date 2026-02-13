@@ -78,12 +78,11 @@ class SearchScreenModel(
                     }
                 }
 				result.onError { error ->
-					// can do something here while error occurs
 					updateState {
 						it.copy(
 							isLoading = false,
 							isLoadingNextPage = false,
-							error = error?.message ?: "Unknown error"
+							error = error.displayMessage
 						)
 					}
 				}

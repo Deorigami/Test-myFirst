@@ -91,7 +91,7 @@ class HeadlinesScreenModel(
                         it.copy(
                             isLoading = false,
                             isLoadingNextPage = false,
-                            error = error?.message ?: "Unknown error"
+                            error = error.displayMessage
                         )
                     }
                 }

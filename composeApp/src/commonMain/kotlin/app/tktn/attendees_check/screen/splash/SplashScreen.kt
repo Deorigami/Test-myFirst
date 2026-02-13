@@ -14,26 +14,29 @@ import app.tktn.core_feature.base.BaseScreen
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 import kotlin.time.Duration.Companion.seconds
+import app.tktn.components.Res
+import app.tktn.components.app_name
+import org.jetbrains.compose.resources.stringResource
 
 object SplashScreen : BaseScreen() {
-	@Composable
-	override fun ComposeContent() {
-		val appNavigation = koinInject<AppModuleNavigation>()
-		LaunchedEffect(Unit) {
-			delay(1.seconds)
-			appNavigation.navigateToNewsHome()
-		}
+    @Composable
+    override fun ComposeContent() {
+        val appNavigation = koinInject<AppModuleNavigation>()
+        LaunchedEffect(Unit) {
+            delay(1.seconds)
+            appNavigation.navigateToNewsHome()
+        }
 
-		Box(
-			modifier = Modifier.fillMaxSize(),
-			contentAlignment = Alignment.Center
-		) {
-			Text(
-				text = "News App",
-				style = MaterialTheme.typography.headlineLarge,
-				fontWeight = FontWeight.Bold,
-				color = MaterialTheme.colorScheme.primary
-			)
-		}
-	}
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(Res.string.app_name),
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
 }

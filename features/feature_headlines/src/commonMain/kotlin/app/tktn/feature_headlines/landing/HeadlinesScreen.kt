@@ -36,6 +36,11 @@ import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_headlines.di.FeatureHeadlinesNavigation
+import app.tktn.components.Res
+import app.tktn.components.offline_mode_msg
+import app.tktn.components.refresh
+import app.tktn.components.top_headlines
+import org.jetbrains.compose.resources.stringResource
 import co.touchlab.kermit.Logger
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,157 +48,121 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 object HeadlinesScreen : BaseScreen() {
 
-	@Composable
-	override fun ComposeContent() {
-		val viewModel: HeadlinesScreenModel = koinViewModel()
-		val state by viewModel.uiState.collectAsState()
-		val listState = rememberLazyListState()
-		val scrollBehavior =
-			TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-		// Pagination check
-		LaunchedEffect(state, listState){
-			Logger.d("LaunchedEffect(state)"){ "IsLastPage : ${state.isLastPage} | isLoading : ${state.isLoading} | isLoadingNextPage : ${state.isLoadingNextPage} | lastVisibleItemIndex : ${listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index}" }
-		}
-		val shouldLoadMore by remember {
-			derivedStateOf {
-				val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-						?: 0
-				lastVisibleItemIndex >= state.articles.size - 1 && !state.isLastPage && !state.isLoadingNextPage && !state.isLoading
-			}
-		}
-		val navigation = koinInject<FeatureHeadlinesNavigation>()
+    @Composable
+    override fun ComposeContent() {
+        val viewModel: HeadlinesScreenModel = koinViewModel()
+        val state by viewModel.uiState.collectAsState()
+        val listState = rememberLazyListState()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        val navigation = koinInject<FeatureHeadlinesNavigation>()
 
-		LaunchedEffect(shouldLoadMore) {
-			Logger.d("LaunchedEffect(shouldLoadMore)") { shouldLoadMore.toString() }
-			if (shouldLoadMore) {
-				viewModel.onEvent(HeadlinesScreenEvent.LoadNextPage)
-			}
-		}
+        // Pagination check
+        val shouldLoadMore by remember {
+            derivedStateOf {
+                val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                lastVisibleItemIndex >= state.articles.size - 1 && !state.isLastPage && !state.isLoadingNextPage && !state.isLoading
+            }
+        }
 
-		Scaffold(
-			modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-			topBar = {
-				TopAppBar(
-					title = {
-						Text(
-							"Top Headlines",
-							fontWeight = FontWeight.Black,
-							modifier = Modifier.padding(horizontal = 8.dp)
-						)
-					},
-					actions = {
-						IconButton(onClick = {
-							viewModel.onEvent(
-								HeadlinesScreenEvent.Refresh
-							)
-						}) {
-							Icon(
-								Icons.Default.Refresh,
-								contentDescription = "Refresh"
-							)
-						}
-					},
-					scrollBehavior = scrollBehavior,
-					colors = TopAppBarDefaults.largeTopAppBarColors(
-						containerColor = MaterialTheme.colorScheme.background,
-						scrolledContainerColor = MaterialTheme.colorScheme.surface
-					)
-				)
-			}
-		) { paddingValues ->
-			Box(
-				modifier = Modifier.fillMaxSize()
-					.padding(paddingValues)
-			) {
-				if (state.isLoading && state.articles.isEmpty()) {
-					CircularProgressIndicator(
-						modifier = Modifier.align(
-							Alignment.Center
-						)
-					)
-				} else {
-					LazyColumn(
-						state = listState,
-						modifier = Modifier.fillMaxSize(),
-						contentPadding = PaddingValues(bottom = 16.dp)
-					) {
-						if (state.isOffline) {
-							item {
-								Surface(
-									color = MaterialTheme.colorScheme.errorContainer,
-									modifier = Modifier.fillMaxWidth()
-										.padding(
-											horizontal = 16.dp,
-											vertical = 8.dp
-										),
-									shape = MaterialTheme.shapes.medium
-								) {
-									Text(
-										text = "Offline Mode - Showing cached news",
-										modifier = Modifier.padding(12.dp),
-										style = MaterialTheme.typography.labelMedium,
-										color = MaterialTheme.colorScheme.onErrorContainer
-									)
-								}
-							}
-						}
+        LaunchedEffect(shouldLoadMore) {
+            if (shouldLoadMore) {
+                viewModel.onEvent(HeadlinesScreenEvent.LoadNextPage)
+            }
+        }
 
-						items(
-							state.articles,
-							key = { it.url }) { article ->
-							NewsArticleItem(
-								onClick = {
-									navigation.navigateToNewsDetail(
-										article
-									)
-								},
-								onBookmarkClick = {
-									viewModel.onEvent(
-										HeadlinesScreenEvent.ToggleBookmark(
-											article
-										)
-									)
-								},
-								title = article.title,
-								author = article.author,
-								description = article.description,
-								url = article.url,
-								urlToImage = article.urlToImage,
-								publishedAt = article.publishedAt.toFormattedDate(),
-								content = article.content,
-								isBookmarked = article.isBookmarked,
-								modifier = Modifier
-							)
-						}
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            stringResource(Res.string.top_headlines),
+                            fontWeight = FontWeight.Black,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    },
+                    actions = {
+                        IconButton(onClick = { viewModel.onEvent(HeadlinesScreenEvent.Refresh) }) {
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = stringResource(Res.string.refresh)
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior,
+                    colors = TopAppBarDefaults.largeTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surface
+                    )
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues)
+            ) {
+                if (state.isLoading && state.articles.isEmpty()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
+                        if (state.isOffline) {
+                            item {
+                                Surface(
+                                    color = MaterialTheme.colorScheme.errorContainer,
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                    shape = MaterialTheme.shapes.medium
+                                ) {
+                                    Text(
+                                        text = stringResource(Res.string.offline_mode_msg),
+                                        modifier = Modifier.padding(12.dp),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
+                            }
+                        }
 
-						if (state.isLoadingNextPage) {
-							item {
-								Box(
-									modifier = Modifier.fillMaxWidth()
-										.padding(16.dp),
-									contentAlignment = Alignment.Center
-								) {
-									CircularProgressIndicator(
-										modifier = Modifier.size(
-											24.dp
-										)
-									)
-								}
-							}
-						}
+                        items(state.articles, key = { it.url }) { article ->
+                            NewsArticleItem(
+                                onClick = { navigation.navigateToNewsDetail(article) },
+                                onBookmarkClick = { viewModel.onEvent(HeadlinesScreenEvent.ToggleBookmark(article)) },
+                                title = article.title,
+                                author = article.author,
+                                description = article.description,
+                                url = article.url,
+                                urlToImage = article.urlToImage,
+                                publishedAt = article.publishedAt.toFormattedDate(),
+                                content = article.content,
+                                isBookmarked = article.isBookmarked
+                            )
+                        }
 
-						state.error?.let {
-							item {
-								Text(
-									text = "Error: $it",
-									color = MaterialTheme.colorScheme.error,
-									modifier = Modifier.padding(16.dp)
-								)
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                        if (state.isLoadingNextPage) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                                }
+                            }
+                        }
+
+                        state.error?.let {
+                            item {
+                                Text(
+                                    text = "Error: $it",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

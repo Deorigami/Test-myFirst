@@ -28,95 +28,83 @@ import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_bookmarks.di.FeatureBookmarksNavigation
 import app.tktn.core_service.extension.DateUtil
+import app.tktn.components.Res
+import app.tktn.components.bookmarks
+import app.tktn.components.bookmark_empty_title
+import app.tktn.components.bookmark_empty_desc
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 object BookmarkScreen : BaseScreen() {
-	@Composable
-	override fun ComposeContent() {
-		val viewModel: BookmarkScreenModel = koinViewModel()
-		val state by viewModel.uiState.collectAsState()
-		val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-		val navigation = koinInject<FeatureBookmarksNavigation>()
+    @Composable
+    override fun ComposeContent() {
+        val viewModel: BookmarkScreenModel = koinViewModel()
+        val state by viewModel.uiState.collectAsState()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        val navigation = koinInject<FeatureBookmarksNavigation>()
 
-		Scaffold(
-			modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-			topBar = {
-				TopAppBar(
-					title = {
-						Text(
-							"Bookmarks",
-							fontWeight = FontWeight.Black,
-							modifier = Modifier.padding(horizontal = 8.dp)
-						)
-					},
-					scrollBehavior = scrollBehavior
-				)
-			}
-		) { paddingValues ->
-			Box(
-				modifier = Modifier.fillMaxSize()
-					.padding(paddingValues)
-			) {
-				if (state.isLoading && state.articles.isEmpty()) {
-					CircularProgressIndicator(
-						modifier = Modifier.align(
-							Alignment.Center
-						)
-					)
-				} else if (state.articles.isEmpty()) {
-					Column(
-						modifier = Modifier.align(Alignment.Center),
-						horizontalAlignment = Alignment.CenterHorizontally
-					) {
-						Text(
-							text = "Your bookmarks will appear here",
-							style = MaterialTheme.typography.titleMedium,
-							color = MaterialTheme.colorScheme.outline
-						)
-						Spacer(modifier = Modifier.height(8.dp))
-						Text(
-							text = "Save articles to read them later",
-							style = MaterialTheme.typography.bodyMedium,
-							color = MaterialTheme.colorScheme.outline.copy(
-								alpha = 0.7f
-							)
-						)
-					}
-				} else {
-					LazyColumn(
-						modifier = Modifier.fillMaxSize(),
-						contentPadding = PaddingValues(bottom = 16.dp)
-					) {
-						items(
-							state.articles,
-							key = { it.url }) { article ->
-							NewsArticleItem(
-								onClick = {
-									navigation.navigateToNewsDetail(article)
-								},
-								onBookmarkClick = {
-									viewModel.onEvent(
-										BookmarkScreenEvent.ToggleBookmark(
-											article
-										)
-									)
-								},
-								title = article.title,
-								author = article.author,
-								description = article.description,
-								url = article.url,
-								urlToImage = article.urlToImage,
-								publishedAt = DateUtil.format(article.publishedAt, "dd MMM yyyy"),
-								content = article.content,
-								isBookmarked = article.isBookmarked,
-								modifier = Modifier.fillMaxSize()
-							)
-						}
-					}
-				}
-			}
-		}
-	}
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            stringResource(Res.string.bookmarks),
+                            fontWeight = FontWeight.Black,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues)
+            ) {
+                if (state.isLoading && state.articles.isEmpty()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else if (state.articles.isEmpty()) {
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.bookmark_empty_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = stringResource(Res.string.bookmark_empty_desc),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
+                        items(state.articles, key = { it.url }) { article ->
+                            NewsArticleItem(
+                                onClick = { navigation.navigateToNewsDetail(article) },
+                                onBookmarkClick = { viewModel.onEvent(BookmarkScreenEvent.ToggleBookmark(article)) },
+                                title = article.title,
+                                author = article.author,
+                                description = article.description,
+                                url = article.url,
+                                urlToImage = article.urlToImage,
+                                publishedAt = DateUtil.format(article.publishedAt, "dd MMM yyyy"),
+                                content = article.content,
+                                isBookmarked = article.isBookmarked,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

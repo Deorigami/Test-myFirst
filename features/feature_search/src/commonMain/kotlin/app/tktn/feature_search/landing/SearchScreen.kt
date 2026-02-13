@@ -40,6 +40,12 @@ import app.tktn.core_feature.base.BaseScreen
 import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_search.di.FeatureSearchNavigation
 import app.tktn.service_news.domain.entity.NewsArticle
+import app.tktn.components.Res
+import app.tktn.components.search
+import app.tktn.components.search_placeholder
+import app.tktn.components.no_results
+import app.tktn.components.go
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -121,7 +127,7 @@ private fun SearchTopBar(scrollBehavior: TopAppBarScrollBehavior) {
     TopAppBar(
         title = {
             Text(
-                "Search",
+                stringResource(Res.string.search),
                 fontWeight = FontWeight.Black,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
@@ -142,7 +148,7 @@ private fun SearchBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        placeholder = { Text("Search news topics...") },
+        placeholder = { Text(stringResource(Res.string.search_placeholder)) },
         shape = MaterialTheme.shapes.large,
         leadingIcon = {
             Icon(
@@ -157,7 +163,7 @@ private fun SearchBar(
                     modifier = Modifier.padding(end = 4.dp),
                     shape = MaterialTheme.shapes.medium
                 ) {
-                    Text("Go")
+                    Text(stringResource(Res.string.go))
                 }
             }
         },
@@ -183,7 +189,7 @@ private fun SearchContent(
             )
         } else if (articles.isEmpty() && query.isNotEmpty() && !isLoading) {
             Text(
-                "No results found",
+                stringResource(Res.string.no_results),
                 modifier = Modifier.align(Alignment.Center),
                 style = MaterialTheme.typography.bodyLarge
             )

@@ -16,8 +16,7 @@ import kotlinx.serialization.Serializable
 abstract class BaseScreen {
 
     @Composable
-    protected open fun ComposeContent() {
-    }
+    protected abstract fun ComposeContent()
 
     open val pageName: String? = this::class.simpleName
 

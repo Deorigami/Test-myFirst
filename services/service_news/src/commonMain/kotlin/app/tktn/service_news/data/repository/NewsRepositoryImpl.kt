@@ -1,6 +1,7 @@
 package app.tktn.service_news.data.repository
 
 import app.tktn.core_service.model.DomainResult
+import app.tktn.service_news.data.NewsConfig
 import app.tktn.service_news.data.local.dao.NewsDao
 import app.tktn.service_news.data.local.entity.NewsArticleEntity
 import app.tktn.service_news.data.remote.NewsApi
@@ -13,11 +14,11 @@ import org.koin.core.annotation.Single
 @Single
 class NewsRepositoryImpl(
 	private val api: NewsApi,
-	private val dao: NewsDao
+	private val dao: NewsDao,
+    private val config: NewsConfig
 ) : NewsRepository {
 
-	private val apiKey =
-		"79a1436988f44403a63332db5b80c840" // I'll use this for now as a default for testing, but should be configurable
+	private val apiKey get() = config.apiKey
 
 	override suspend fun getTopHeadlines(page: Int): DomainResult<List<NewsArticle>> {
 		val response = api.getTopHeadlines(page = page, apiKey = apiKey)

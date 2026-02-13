@@ -22,55 +22,59 @@ import app.tktn.feature_bookmarks.landing.BookmarkScreen
 import app.tktn.feature_headlines.landing.HeadlinesScreen
 import app.tktn.feature_search.landing.SearchScreen
 import kotlinx.coroutines.launch
+import app.tktn.components.Res
+import app.tktn.components.top_headlines
+import app.tktn.components.search
+import app.tktn.components.bookmarks
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 object NewsHomeScreen : BaseScreen() {
-	@Composable
-	override fun ComposeContent() {
-		val pagerState = rememberPagerState(pageCount = { 3 })
-		val scope = rememberCoroutineScope()
+    @Composable
+    override fun ComposeContent() {
+        val pagerState = rememberPagerState(pageCount = { 3 })
+        val scope = rememberCoroutineScope()
 
-		Scaffold(
-			bottomBar = {
-				NavigationBar {
-					NewsTab.entries.forEach { tab ->
-						NavigationBarItem(
-							selected = pagerState.currentPage == tab.ordinal,
-							onClick = {
-								scope.launch {
-									pagerState.animateScrollToPage(
-										tab.ordinal
-									)
-								}
-							},
-							icon = {
-								Icon(
-									tab.icon,
-									contentDescription = tab.title
-								)
-							},
-							label = { Text(tab.title) }
-						)
-					}
-				}
-			}
-		) { paddingValues ->
-			HorizontalPager(
-				state = pagerState,
-				modifier = Modifier.fillMaxSize()
-					.padding(bottom = paddingValues.calculateBottomPadding())
-			) { page ->
-				when (page) {
-					0 -> HeadlinesScreen.ComposableScreen()
-					1 -> SearchScreen.ComposableScreen()
-					2 -> BookmarkScreen.ComposableScreen()
-				}
-			}
-		}
-	}
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    NewsTab.entries.forEach { tab ->
+                        NavigationBarItem(
+                            selected = pagerState.currentPage == tab.ordinal,
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(tab.ordinal)
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    tab.icon,
+                                    contentDescription = stringResource(tab.resource)
+                                )
+                            },
+                            label = { Text(stringResource(tab.resource)) }
+                        )
+                    }
+                }
+            }
+        ) { paddingValues ->
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding()),
+                userScrollEnabled = false // Better UX mixed with bottom nav
+            ) { page ->
+                when (page) {
+                    0 -> HeadlinesScreen.ComposableScreen()
+                    1 -> SearchScreen.ComposableScreen()
+                    2 -> BookmarkScreen.ComposableScreen()
+                }
+            }
+        }
+    }
 }
 
-enum class NewsTab(val title: String, val icon: ImageVector) {
-	Headlines("Headlines", Icons.Default.Home),
-	Search("Search", Icons.Default.Search),
-	Bookmarks("Bookmarks", Icons.Default.Bookmark)
+enum class NewsTab(val resource: StringResource, val icon: ImageVector) {
+    Headlines(Res.string.top_headlines, Icons.Default.Home),
+    Search(Res.string.search, Icons.Default.Search),
+    Bookmarks(Res.string.bookmarks, Icons.Default.Bookmark)
 }

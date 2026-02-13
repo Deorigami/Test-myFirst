@@ -1,0 +1,22 @@
+<resources>
+    <string name="cyclone">Cyclone</string>
+    <string name="open_github">Open github</string>
+    <string name="run">Run</string>
+    <string name="stop">Stop</string>
+    <string name="theme">Theme</string>
+    <string name="app_name">News App</string>
+    <string name="top_headlines">Top Headlines</string>
+    <string name="search">Search</string>
+    <string name="search_placeholder">Search news topics...</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="news_detail">News Detail</string>
+    <string name="offline_mode_msg">Offline Mode - Showing cached news</string>
+    <string name="no_results">No results found</string>
+    <string name="bookmark_empty_title">Your bookmarks will appear here</string>
+    <string name="bookmark_empty_desc">Save articles to read them later</string>
+    <string name="unknown_author">Unknown</string>
+    <string name="toggle_bookmark">Toggle Bookmark</string>
+    <string name="refresh">Refresh</string>
+    <string name="go">Go</string>
+    <string name="back">Back</string>
+</resources>
