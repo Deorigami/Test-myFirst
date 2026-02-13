@@ -11,4 +11,5 @@ interface NewsRepository {
     fun getCachedHeadlines(): Flow<List<NewsArticle>>
     suspend fun toggleBookmark(article: NewsArticle)
     suspend fun isBookmarked(url: String): Boolean
+    fun observeBookmarkStatus(url: String): Flow<Boolean>
 }

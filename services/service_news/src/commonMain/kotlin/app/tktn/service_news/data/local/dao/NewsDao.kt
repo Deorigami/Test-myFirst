@@ -33,4 +33,8 @@ interface NewsDao {
 	@Transaction
     @Query("DELETE FROM news_articles WHERE isTopHeadline = 1 AND isBookmarked = 0")
     suspend fun clearTopHeadlines()
+
+    @Transaction
+    @Query("SELECT * FROM news_articles WHERE url = :url")
+    fun observeArticleByUrl(url: String): Flow<NewsArticleEntity?>
 }

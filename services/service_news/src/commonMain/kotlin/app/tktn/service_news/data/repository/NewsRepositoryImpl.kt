@@ -123,6 +123,10 @@ class NewsRepositoryImpl(
 		return dao.getArticleByUrl(url)?.isBookmarked ?: false
 	}
 
+    override fun observeBookmarkStatus(url: String): Flow<Boolean> {
+        return dao.observeArticleByUrl(url).map { it?.isBookmarked ?: false }
+    }
+
 	private fun NewsArticleEntity.toDomain() = NewsArticle(
 		title = title,
 		author = author,
