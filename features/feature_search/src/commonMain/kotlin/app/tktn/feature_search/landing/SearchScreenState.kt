@@ -9,5 +9,5 @@ data class SearchScreenState(
     val isLastPage: Boolean = false,
     val isLoading: Boolean = false,
     val isLoadingNextPage: Boolean = false,
-    val error: String? = null
+    val error: String? = null // can put this for showing some error on screen, or you can do something in viewModel
 )

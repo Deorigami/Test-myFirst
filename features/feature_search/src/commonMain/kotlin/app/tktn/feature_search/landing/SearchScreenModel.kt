@@ -2,6 +2,7 @@ package app.tktn.feature_search.landing
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
+import app.tktn.core_service.model.StatefulResult.Companion.onError
 import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.usecase.GetBookmarkedNewsUseCase
@@ -76,6 +77,16 @@ class SearchScreenModel(
                         )
                     }
                 }
+				result.onError { error ->
+					// can do something here while error occurs
+					updateState {
+						it.copy(
+							isLoading = false,
+							isLoadingNextPage = false,
+							error = error?.message ?: "Unknown error"
+						)
+					}
+				}
             }
         }
     }
