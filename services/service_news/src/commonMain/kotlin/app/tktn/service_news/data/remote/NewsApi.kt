@@ -9,6 +9,7 @@ interface NewsApi {
     @GET("v2/top-headlines")
     suspend fun getTopHeadlines(
 		@Query("country") country: String = "us",
+		@Query("category") category: String = "technology",
 		@Query("pageSize") pageSize: Int = Constant.PaginationPageSize,
 		@Query("page") page: Int,
 		@Query("apiKey") apiKey: String

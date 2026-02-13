@@ -105,6 +105,7 @@ private fun SearchScreenContent(
                 isLoading = state.isLoading,
                 articles = state.articles,
                 query = state.query,
+                error = state.error,
                 isLoadingNextPage = state.isLoadingNextPage,
                 listState = listState,
                 onNavigateToDetail = onNavigateToDetail,
@@ -169,6 +170,7 @@ private fun SearchContent(
     isLoading: Boolean,
     articles: List<NewsArticle>,
     query: String,
+    error: String?,
     isLoadingNextPage: Boolean,
     listState: LazyListState,
     onNavigateToDetail: (NewsArticle) -> Unit,
@@ -189,6 +191,7 @@ private fun SearchContent(
             ArticleList(
                 articles = articles,
                 listState = listState,
+                error = error,
                 isLoadingNextPage = isLoadingNextPage,
                 onNavigateToDetail = onNavigateToDetail,
                 onBookmarkClick = onBookmarkClick
@@ -201,6 +204,7 @@ private fun SearchContent(
 private fun ArticleList(
     articles: List<NewsArticle>,
     listState: LazyListState,
+    error: String?,
     isLoadingNextPage: Boolean,
     onNavigateToDetail: (NewsArticle) -> Unit,
     onBookmarkClick: (NewsArticle) -> Unit
@@ -238,6 +242,16 @@ private fun ArticleList(
                 ) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 }
+            }
+        }
+
+        error?.let {
+            item {
+                Text(
+                    text = "Error: $it",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }

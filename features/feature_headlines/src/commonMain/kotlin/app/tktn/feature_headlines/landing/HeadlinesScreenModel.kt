@@ -2,6 +2,7 @@ package app.tktn.feature_headlines.landing
 
 import androidx.lifecycle.viewModelScope
 import app.tktn.core_feature.base.BaseScreenModel
+import app.tktn.core_service.model.StatefulResult.Companion.onError
 import app.tktn.core_service.model.StatefulResult.Companion.onSuccess
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.usecase.GetCachedHeadlinesUseCase
@@ -75,14 +76,22 @@ class HeadlinesScreenModel(
             getTopHeadlinesUseCase.execute(viewModelScope, nextPage) { result ->
                 result.onSuccess { newArticles ->
                     updateState { state ->
-                        val updatedArticles = if (refresh) newArticles else state.articles + newArticles
                         state.copy(
-                            articles = updatedArticles,
                             page = nextPage,
                             isLastPage = newArticles.size < 5,
                             isLoading = false,
                             isLoadingNextPage = false,
-                            isOffline = false
+                            isOffline = false,
+                            error = null
+                        )
+                    }
+                }
+                result.onError { error ->
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            isLoadingNextPage = false,
+                            error = error?.message ?: "Unknown error"
                         )
                     }
                 }

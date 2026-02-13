@@ -7,7 +7,7 @@
     <application
         android:name=".MyApp"
         android:icon="@mipmap/ic_launcher"
-        android:label="Attendees Check App"
+        android:label="myFirst - News App"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
             android:name=".AppActivity"
