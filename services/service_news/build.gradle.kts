@@ -9,6 +9,11 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":cores:core_service"))
         }
+		commonTest.dependencies {
+			implementation(libs.kotlin.test)
+			implementation(libs.koin.test)
+			implementation(libs.kotlinx.coroutines.test)
+		}
     }
 }
 

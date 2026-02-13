@@ -46,6 +46,7 @@ android-faceDetection = { module = "com.google.mlkit:face-detection", version.re
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }
 inspektor = { module = "io.github.orioneee:axer", version.ref = "inspektor" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 composeMediaPlayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composeMediaPlayer" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -60,6 +61,7 @@ koin-annotations = { module = "io.insert-koin:koin-annotations" }
 koin-annotations-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotationsBom" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-core = { module = "io.insert-koin:koin-core" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinBom" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 composeIcons-lineAwesome = { module = "br.com.devsrsouza.compose.icons:line-awesome", version.ref = "composeIcons" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
