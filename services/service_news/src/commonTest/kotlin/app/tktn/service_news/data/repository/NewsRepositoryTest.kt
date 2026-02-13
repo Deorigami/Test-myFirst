@@ -126,6 +126,23 @@ class NewsRepositoryTest {
         assertFalse(isNotBookmarked)
     }
 
+    @Test
+    fun `observeBookmarkStatus returns flow of bookmark state`() = runTest {
+        // Arrange
+        val article = createNewsArticle("Title 1", "http://url1.com")
+        
+        // Act & Assert
+        repository.observeBookmarkStatus("http://url1.com").first().let { 
+            assertFalse(it, "Should not be bookmarked initially")
+        }
+        
+        repository.toggleBookmark(article)
+        
+        repository.observeBookmarkStatus("http://url1.com").first().let {
+            assertTrue(it, "Should be bookmarked after toggle")
+        }
+    }
+
     // Helpers
 
     private fun createArticleDto(title: String, url: String) = ArticleDto(
@@ -158,15 +175,16 @@ class FakeNewsApi : NewsApi {
     var searchResponse = NewsResponse("ok", 0, emptyList())
 
     override suspend fun getTopHeadlines(
-        country: String,
-        pageSize: Int,
-        page: Int,
-        apiKey: String
-    ): NewsResponse {
+		country: String,
+		category: String,
+		pageSize: Int,
+		page: Int,
+		apiKey: String
+	): NewsResponse {
         return topHeadlinesResponse
     }
 
-    override suspend fun searchNews(
+	override suspend fun searchNews(
         query: String,
         pageSize: Int,
         page: Int,
@@ -216,35 +234,11 @@ class FakeNewsDao : NewsDao {
 
     override suspend fun clearTopHeadlines() {
         _articles.update { current ->
-            // Delete if isTopHeadline AND isBookmarked=0
-            // Basically remove top headline flag, or delete row if it's not bookmarked
-            // The Dao query is: DELETE FROM news_articles WHERE isTopHeadline = 1 AND isBookmarked = 0
-            // But if isBookmarked = 1, it presumably keeps it but maybe should clear isTopHeadline status?
-            // The REAL Dao implementation likely removes the rows. 
-            // Repository implementation logic:
-            // It calls clearTopHeadlines() before inserting new ones.
-            
-            // To faithfully mimic the SQL:
             current.filterNot { it.isTopHeadline && !it.isBookmarked }
-            // Note: Use case logic implies we want to replace top headlines.
-            // If an article is bookmarked, we keep it. If it was top headline, it effectively loses that status unless re-inserted.
-            // But wait, if I delete the row, I lose the bookmark too if the condition matches?
-            // Ah, SQL says: WHERE isTopHeadline = 1 AND isBookmarked = 0.
-            // So if isBookmarked is 1, it is NOT deleted.
-            // But does it lose isTopHeadline status? The SQL delete removes the ROW.
-            // So if isBookmarked=1, the row stays. It remains isTopHeadline=1 unless updated.
-            // The Repository then inserts new articles.
-            // If a new article matches the existing one, `insertArticles` with REPLACE strategy will overwrite it, 
-            // and the Repository sets `isTopHeadline=true` for new ones.
-            // The Repository also sets `isBookmarked` based on `existing?.isBookmarked`.
-            
-            // So my fake implementation of `clearTopHeadlines` should just delete rows that preserve the SQL logic.
-        }
-        
-        // Wait, if I delete rows where (isTopHeadline=1 AND isBookmarked=0),
-        // Then rows with (isTopHeadline=1 AND isBookmarked=1) remain.
-        // But do they remain as Top Headlines?
-        // Yes, existing rows are untouched.
-        // Then `insertArticles` comes along.
+            }
     }
+
+	override fun observeArticleByUrl(url: String): Flow<NewsArticleEntity?> {
+		return _articles.map { list -> list.find { it.url == url } }
+	}
 }
