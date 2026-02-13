@@ -34,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.tktn.core_feature.base.BaseScreen
+import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_headlines.di.FeatureHeadlinesNavigation
 import app.tktn.service_news.domain.entity.NewsArticle
 import app.tktn.service_news.domain.repository.NewsRepository
@@ -128,7 +129,7 @@ data class NewsDetailScreen(val article: NewsArticle) : BaseScreen() {
 						)
 						Spacer(modifier = Modifier.width(8.dp))
 						Text(
-							text = article.publishedAt,
+							text = article.publishedAt.toFormattedDate("dd MMM yyyy HH:mm:ss"),
 							style = MaterialTheme.typography.labelMedium,
 							color = MaterialTheme.colorScheme.outline
 						)

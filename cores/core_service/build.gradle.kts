@@ -9,6 +9,8 @@ android.namespace = "app.tktn.core_service"
 kotlin.sourceSets.commonMain.configure {
 	dependencies {
 		implementation(libs.inspektor)
+		implementation(libs.kotlinx.datetime)
+		implementation(libs.kermit)
 	}
 }
 

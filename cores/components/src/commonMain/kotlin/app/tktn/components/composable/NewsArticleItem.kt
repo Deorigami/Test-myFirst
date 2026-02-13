@@ -115,7 +115,7 @@ fun NewsArticleItem(
 						modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = publishedAt.take(10),
+                        text = publishedAt,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline
                     )

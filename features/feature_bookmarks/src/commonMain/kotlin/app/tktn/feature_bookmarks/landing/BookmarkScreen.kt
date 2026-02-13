@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
 import app.tktn.feature_bookmarks.di.FeatureBookmarksNavigation
+import app.tktn.core_service.extension.DateUtil
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -107,7 +108,7 @@ object BookmarkScreen : BaseScreen() {
 								description = article.description,
 								url = article.url,
 								urlToImage = article.urlToImage,
-								publishedAt = article.publishedAt,
+								publishedAt = DateUtil.format(article.publishedAt, "dd MMM yyyy"),
 								content = article.content,
 								isBookmarked = article.isBookmarked,
 								modifier = Modifier.fillMaxSize()

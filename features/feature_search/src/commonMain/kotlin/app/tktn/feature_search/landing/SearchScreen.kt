@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.tktn.components.composable.NewsArticleItem
 import app.tktn.core_feature.base.BaseScreen
+import app.tktn.core_service.extension.toFormattedDate
 import app.tktn.feature_search.di.FeatureSearchNavigation
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -157,7 +158,7 @@ object SearchScreen : BaseScreen() {
 									description = article.description,
 									url = article.url,
 									urlToImage = article.urlToImage,
-									publishedAt = article.publishedAt,
+									publishedAt = article.publishedAt.toFormattedDate(),
 									content = article.content,
 									isBookmarked = article.isBookmarked,
 								)

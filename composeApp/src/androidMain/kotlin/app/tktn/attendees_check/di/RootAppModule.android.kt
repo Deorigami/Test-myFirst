@@ -14,7 +14,6 @@ actual val roomDatabaseModule: org.koin.core.module.Module = module {
 				NewsDatabase::class.java,
 				"news_database"
 			)
-			.setDriver(AxerBundledSQLiteDriver.getInstance())
 			.setQueryCoroutineContext(Dispatchers.IO)
 			.fallbackToDestructiveMigration(false)
 			.build()
