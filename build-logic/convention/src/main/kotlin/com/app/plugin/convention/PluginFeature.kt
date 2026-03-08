@@ -105,15 +105,7 @@ class PluginFeature : Plugin<Project> {
 							implementation(libs.findLibrary("androidx.navigation3.material3.adaptive").get())
                         }
                     }
-                    val mobileMain = create("mobileMain").apply {
-                        val commonMain = getByName("commonMain")
-                        dependsOn(commonMain)
-                        dependencies {
-
-                        }
-                    }
                     androidMain.configure {
-                        dependsOn(mobileMain)
                         dependencies {
                             implementation(compose.uiTooling)
                             implementation(libs.findLibrary("androidx.activityCompose").get())
@@ -127,7 +119,6 @@ class PluginFeature : Plugin<Project> {
                         implementation(libs.findLibrary("ktor.client.okhttp").get())
                     }
                     iosMain.configure {
-                        dependsOn(mobileMain)
                         dependencies {
                             implementation(libs.findLibrary("ktor.client.darwin").get())
                         }
