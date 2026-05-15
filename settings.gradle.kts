@@ -1,4 +1,4 @@
-rootProject.name = "MyFirst-News-App"
+rootProject.name = "CMP-Multiplatform-Template"
 
 pluginManagement {
     repositories {
@@ -36,12 +36,9 @@ plugins {
 include(
     ":composeApp",
 
-    ":features:feature_util",
-    ":features:feature_headlines",
-    ":features:feature_bookmarks",
-    ":features:feature_search",
+    ":features:feature_sample",
 
-    ":services:service_news",
+    ":services:service_sample",
 
     ":cores:core_feature",
     ":cores:components",

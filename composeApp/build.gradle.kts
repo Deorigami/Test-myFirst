@@ -1,31 +1,23 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
 
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.compose.reload.ComposeHotRun
-//import org.jetbrains.compose.reload.ComposeHotRun
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
-//    alias(libs.plugins.hotReload)
     alias(libs.plugins.kotlinx.serialization)
-//    alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.buildConfig)
 }
 
 kotlin {
     androidTarget {
-        //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
     }
 
@@ -54,8 +46,8 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
-				implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
-				implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+                implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+                implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
                 implementation(libs.kermit)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.core)
@@ -81,22 +73,18 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.annotations)
                 implementation(libs.materialKolor)
-				implementation(libs.room.runtime)
-				implementation(libs.room.sqlite)
-                implementation(project(":features:feature_util"))
+                implementation(libs.connectivity.core)
+                implementation(libs.connectivity.http)
+                // Core modules
                 implementation(project(":cores:core_feature"))
                 implementation(project(":cores:core_service"))
                 implementation(project(":cores:core_navigation"))
                 implementation(project(":cores:components"))
-                implementation(project(":features:feature_bookmarks"))
-                implementation(project(":features:feature_search"))
-                implementation(project(":features:feature_headlines"))
-                implementation(project(":services:service_news"))
-                implementation(project(":services:service_news"))
-				implementation(libs.inspektor)
-				implementation(libs.connectivity.core)
-				implementation(libs.connectivity.http)
-			}
+                // Feature modules — add new features here
+                implementation(project(":features:feature_sample"))
+                // Service modules — add new services here
+                implementation(project(":services:service_sample"))
+            }
         }
 
         commonTest.dependencies {
@@ -122,32 +110,28 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-
     }
 }
 
 android {
-    namespace = "app.tktn.attendees_check"
+    namespace = "com.cmp.template"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 24
         targetSdk = 36
-
-        applicationId = "app.tktn.attendees_check.androidApp"
+        applicationId = "com.cmp.template"
         versionCode = 1
         versionName = "1.0.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-	buildTypes {
-		getByName("release") {
-			signingConfig = signingConfigs.getByName("debug")
-		}
-	}
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 }
 
-//https://developer.android.com/develop/ui/compose/testing#setup
 dependencies {
     androidTestImplementation(libs.androidx.uitest.junit4)
     debugImplementation(libs.androidx.uitest.testManifest)
@@ -159,7 +143,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "Attendees Check App"
+            packageName = "CMP Multiplatform Template"
             packageVersion = "1.0.0"
 
             linux {
@@ -170,24 +154,12 @@ compose.desktop {
             }
             macOS {
                 iconFile.set(project.file("desktopAppIcons/MacosIcon.icns"))
-                bundleID = "app.tktn.attendees_check.desktopApp"
+                bundleID = "com.cmp.template.desktopApp"
             }
         }
     }
 }
 
-//tasks.withType<ComposeHotRun>().configureEach {
-//    mainClass.set("MainKt")
-//}
-
-//buildConfig {
-//    // BuildConfig configuration here.
-//    // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
-//}
-
-//room {
-//    schemaDirectory("$projectDir/schemas")
-//}
 tasks.configureEach {
     if (name.startsWith("ksp") && name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
@@ -197,24 +169,9 @@ afterEvaluate {
     tasks.filter {
         it.name.contains("SourcesJar", true)
     }.forEach {
-        println("SourceJarTask====>${it.name}")
         it.dependsOn("kspCommonMainKotlinMetadata")
     }
 }
 dependencies {
-//    with(libs.room.compiler) {
-//        add("kspAndroid", this)
-//        add("kspJvm", this)
-//        add("kspIosX64", this)
-//        add("kspIosArm64", this)
-//        add("kspIosSimulatorArm64", this)
-//    }
-
     add("kspCommonMainMetadata", libs.koin.annotations.ksp)
-	add("kspAndroid", libs.room.compiler)
-	add("kspIosSimulatorArm64", libs.room.compiler)
-	add("kspIosX64", libs.room.compiler)
-	add("kspIosArm64", libs.room.compiler)
 }
-
-

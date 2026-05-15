@@ -19,4 +19,4 @@ kotlin {
 	}
 }
 
-android.namespace = "app.tktn.core_feature"
+android.namespace = "com.cmp.template.core_feature"

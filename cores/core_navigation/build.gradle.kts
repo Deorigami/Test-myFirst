@@ -2,12 +2,12 @@ plugins {
 	id("plugin.service")
 }
 
-android.namespace = "app.tktn.core_navigation"
+android.namespace = "com.cmp.template.core_navigation"
 
 kotlin {
 	sourceSets {
 		commonMain.dependencies {
-			implementation(project(":services:service_news"))
+			// No dependencies — GlobalNavigation is a pure interface
 		}
 	}
 }

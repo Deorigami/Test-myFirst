@@ -7,9 +7,9 @@ kotlin.sourceSets.commonMain {
     }
 }
 
-android.namespace = "app.tktn.components"
+android.namespace = "com.cmp.template.components"
 
 compose.resources {
 	publicResClass = true
-	packageOfResClass = "app.tktn.components"
+	packageOfResClass = "com.cmp.template.components"
 }

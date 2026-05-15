@@ -4,11 +4,10 @@ plugins {
 	id("plugin.service")
 }
 
-android.namespace = "app.tktn.core_service"
+android.namespace = "com.cmp.template.core_service"
 
 kotlin.sourceSets.commonMain.configure {
 	dependencies {
-		implementation(libs.inspektor)
 		implementation(libs.kotlinx.datetime)
 		implementation(libs.kermit)
 	}

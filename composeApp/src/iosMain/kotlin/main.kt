@@ -1,14 +1,12 @@
-import androidx.compose.ui.window.ComposeUIViewController
-import app.tktn.attendees_check.RootApp
-import app.tktn.attendees_check.di.RootAppModule
-import app.tktn.attendees_check.di.roomDatabaseModule
+﻿import androidx.compose.ui.window.ComposeUIViewController
+import com.cmp.template.RootApp
+import com.cmp.template.di.RootAppModule
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
-import platform.UIKit.UIViewController
-
-fun MainViewController(): UIViewController {
-	startKoin {
-		modules(RootAppModule().module, roomDatabaseModule)
-	}
-	return ComposeUIViewController { RootApp() }
-}
+fun MainViewController() = ComposeUIViewController(
+    configure = {
+        startKoin {
+            modules(RootAppModule().module)
+        }
+    }
+) { RootApp() }
