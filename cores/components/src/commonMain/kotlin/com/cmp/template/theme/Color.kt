@@ -1,4 +1,4 @@
-﻿package com.cmp.template.theme
+package com.cmp.template.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -146,3 +146,4 @@ val SurfaceContainerLowDark       = Color(0xFF1A1C26)
 val SurfaceContainerDark          = Color(0xFF1E1F2A)
 val SurfaceContainerHighDark      = Color(0xFF292A35)
 val SurfaceContainerHighestDark   = Color(0xFF333440)
+

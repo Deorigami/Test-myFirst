@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.cmp.template.components.SampleCard
+import com.cmp.template.components.SingpassQrCard
 import com.cmp.template.core_feature.base.BaseScreen
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinx.serialization.Serializable
@@ -69,6 +70,12 @@ private fun SampleScreenContent(
                     }
                 }
             }
+
+            SingpassQrCard(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            )
         }
     }
 }

@@ -37,6 +37,7 @@ androidxNavigation3Material = "1.3.0-alpha03"
 composeMediaPlayer = "0.8.7"
 
 connectivity = "2.4.1"
+qrose = "1.1.2"
 
 [libraries]
 
@@ -126,6 +127,8 @@ connectivity-device = { module = "dev.jordond.connectivity:connectivity-device",
 connectivity-http = { module = "dev.jordond.connectivity:connectivity-http", version.ref = "connectivity" }
 connectivity-compose-device = { module = "dev.jordond.connectivity:connectivity-compose-device", version.ref = "connectivity" }
 connectivity-compose-http = { module = "dev.jordond.connectivity:connectivity-compose-http", version.ref = "connectivity" }
+
+qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
 
 
 [plugins]

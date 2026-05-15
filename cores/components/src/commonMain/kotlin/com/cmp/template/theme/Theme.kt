@@ -1,4 +1,4 @@
-﻿package com.cmp.template.theme
+package com.cmp.template.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 
 // ─────────────────────────────────────────────
 //  Light theme color scheme
-// ─────────────────────────────────────────────
+// ──────────────────────────────��──────────────
 private val LightColorScheme = lightColorScheme(
     primary                  = PrimaryLight,
     onPrimary                = OnPrimaryLight,
@@ -89,23 +89,20 @@ private val DarkColorScheme = darkColorScheme(
     surfaceContainerHighest  = SurfaceContainerHighestDark,
 )
 
-internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(false) }
+val LocalThemeIsDark = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-internal fun AppTheme(
+fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val isDarkState = remember(darkTheme) { mutableStateOf(darkTheme) }
     CompositionLocalProvider(LocalThemeIsDark provides isDarkState) {
         val isDark by isDarkState
-        SystemAppearance(!isDark)
         MaterialTheme(
-            colorScheme = if (isDark) DarkColorScheme else LightColorScheme,
+            colorScheme = if (false) DarkColorScheme else LightColorScheme,
             content = { Surface(content = content) }
         )
     }
 }
 
-@Composable
-internal expect fun SystemAppearance(isDark: Boolean)
