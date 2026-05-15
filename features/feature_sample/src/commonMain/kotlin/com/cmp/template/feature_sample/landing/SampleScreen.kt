@@ -71,11 +71,13 @@ private fun SampleScreenContent(
                 }
             }
 
-            SingpassQrCard(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-            )
+            Box(modifier = Modifier.size(240.dp)){
+                SingpassQrCard(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp)
+                )
+            }
         }
     }
 }

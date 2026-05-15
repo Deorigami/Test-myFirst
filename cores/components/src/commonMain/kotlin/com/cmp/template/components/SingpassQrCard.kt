@@ -4,13 +4,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,47 +37,68 @@ import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import org.jetbrains.compose.resources.painterResource
 
+// Ratios calibrated at the 260.dp "perfect" baseline:
+//   border          4   / 260 ≈ 0.0154
+//   cornerRadius   16   / 260 ≈ 0.0615
+//   padding        20   / 260 ≈ 0.0769
+//   innerCorner     8   / 260 ≈ 0.0308
+//   spinnerSize    32   / 260 ≈ 0.1231
+//   spinnerStroke   2.5 / 260 ≈ 0.0096
+//   footerPadH     12   / 260 ≈ 0.0462
+private const val RATIO_BORDER         = 0.0154f
+private const val RATIO_CORNER         = 0.0615f
+private const val RATIO_PADDING        = 0.0769f
+private const val RATIO_INNER_CORNER   = 0.0308f
+private const val RATIO_SPINNER        = 0.1231f
+private const val RATIO_SPINNER_STROKE = 0.0096f
+private const val RATIO_FOOTER_PAD_H   = 0.0462f
+
 /**
  * A styled Singpass QR-code card.
  *
- * Layout mirrors the official Singpass branding:
- *  - White card with red rounded border
- *  - QR code area with the Singpass "i" icon centred on top
- *  - "singpass" footer with flanking red divider lines
+ * Size is controlled entirely by [modifier] — use `Modifier.size(...)`,
+ * `Modifier.fillMaxWidth()`, etc. All internal spacing and proportions
+ * scale automatically with the measured width.
  *
- * @param modifier    Standard Compose modifier.
- * @param qrContent   The string to encode as a QR code (URL, token, etc.).
- *                    Pass `null` to show a loading spinner while the content
- *                    is being fetched.
- * @param isLoading   Explicit loading flag. Defaults to `true` when [qrContent] is `null`.
- * @param cardSize    Width & height of the card. Defaults to 260.dp.
- * @param iconSize    Size of the centred Singpass icon overlay. Defaults to 48.dp.
+ * @param modifier   Controls the card's size and placement. Defaults to 260×260 dp.
+ * @param qrContent  String to encode. Pass `null` to show a loading spinner.
+ * @param isLoading  Override loading state. Defaults to `true` when [qrContent] is `null`.
  */
 @Composable
 fun SingpassQrCard(
     modifier: Modifier = Modifier,
-    qrContent: String? = "Mengetest QR Code",
+    qrContent: String? = "Test QR",
     isLoading: Boolean = qrContent == null,
-    cardSize: Dp = 260.dp,
-    iconSize: Dp = 48.dp,
 ) {
     var footerHeightPx by remember { mutableIntStateOf(0) }
 
-    Box(
-        modifier = modifier.width(cardSize),
+    // Outer Box: the caller's modifier (size/padding/etc.) lives here.
+    // Inner BoxWithConstraints: reads maxWidth reliably from the already-sized Box.
+    BoxWithConstraints(
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
-    ) {
+    )
+    {
+        val cardSize = maxWidth   // the single source of truth for all sizing
+
+        val borderWidth    = cardSize * RATIO_BORDER
+        val cornerRadius   = cardSize * RATIO_CORNER
+        val contentPadding = cardSize * RATIO_PADDING
+        val innerCorner    = cardSize * RATIO_INNER_CORNER
+        val spinnerSize    = cardSize * RATIO_SPINNER
+        val spinnerStroke  = cardSize * RATIO_SPINNER_STROKE
+
         Card(
-            modifier = Modifier.size(cardSize),
-            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(cornerRadius),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            border = BorderStroke(width = 4.dp, color = SingpassRed),
+            border = BorderStroke(width = borderWidth, color = SingpassRed),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp),
+                    .padding(contentPadding),
                 contentAlignment = Alignment.Center,
             ) {
                 if (isLoading || qrContent == null) {
@@ -86,19 +107,18 @@ fun SingpassQrCard(
                             .fillMaxSize()
                             .background(
                                 color = Color(0xFFF5F5F5),
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(innerCorner),
                             ),
                         contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator(
                             color = SingpassRed,
-                            strokeWidth = 2.5.dp,
-                            modifier = Modifier.size(32.dp),
+                            strokeWidth = spinnerStroke,
+                            modifier = Modifier.size(spinnerSize),
                         )
                     }
                 } else {
                     val singpassIcon = painterResource(Res.drawable.singpass_icon)
-                    // QR code rendered by qrose
                     val qrPainter = rememberQrCodePainter(data = qrContent) {
                         shapes {
                             QrShapes(
@@ -122,11 +142,8 @@ fun SingpassQrCard(
             }
         }
 
-        // ── Singpass branded footer ─────────────────────────────────────
-        // Lives OUTSIDE the Card so the Card's shape-clip never applies.
-        // onSizeChanged captures the footer's rendered height; offset shifts
-        // it down by exactly half so it straddles the card's bottom border.
         SingpassFooter(
+            footerPaddingH = cardSize * RATIO_FOOTER_PAD_H,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .onSizeChanged { footerHeightPx = it.height }
@@ -141,9 +158,12 @@ fun SingpassQrCard(
  * reads cleanly when straddling the card's bottom border.
  */
 @Composable
-fun SingpassFooter(modifier: Modifier = Modifier) {
+fun SingpassFooter(
+    modifier: Modifier = Modifier,
+    footerPaddingH: Dp = 12.dp,
+) {
     Row(
-        modifier = modifier.background(Color.White).padding(horizontal = 12.dp),
+        modifier = modifier.background(Color.White).padding(horizontal = footerPaddingH),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
