@@ -72,7 +72,7 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.annotations)
-                implementation(libs.materialKolor)
+                // implementation(libs.materialKolor) // removed — using static brand color scheme
                 implementation(libs.connectivity.core)
                 implementation(libs.connectivity.http)
                 // Core modules
