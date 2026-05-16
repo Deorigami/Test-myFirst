@@ -5,7 +5,11 @@ import ComposeApp
 struct ComposeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView().ignoresSafeArea(.all)
+            ContentView()
+                .ignoresSafeArea(.all)
+                .onOpenURL { url in
+                    RinkuIos.shared.onDeepLinkReceived(url: url.absoluteString)
+                }
         }
     }
 }

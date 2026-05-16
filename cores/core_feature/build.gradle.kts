@@ -15,6 +15,9 @@ kotlin {
 			implementation(libs.kotlinx.coroutines.core)
 			implementation(libs.koin.annotations)
 			implementation(libs.koin.core)
+
+			implementation(libs.rinku)
+			implementation(libs.rinku.compose.ext)
 		}
 	}
 }

@@ -4,5 +4,15 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<!-- Custom URL scheme for deep links (e.g. Singpass callback) -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.cmp.template</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

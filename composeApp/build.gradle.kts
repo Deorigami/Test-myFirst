@@ -81,6 +81,9 @@ kotlin {
                 implementation(project(":cores:core_service"))
                 implementation(project(":cores:core_navigation"))
                 implementation(project(":cores:components"))
+                // Rinku — deep link handling
+                implementation(libs.rinku)
+                implementation(libs.rinku.compose.ext)
                 // Feature modules — add new features here
                 implementation(project(":features:feature_sample"))
                 implementation(project(":features:feature_auth"))

@@ -39,6 +39,7 @@ composeMediaPlayer = "0.8.7"
 
 connectivity = "2.4.1"
 qrose = "1.1.2"
+rinku = "1.6.0"
 androidx-browser = "1.8.0"
 
 [libraries]
@@ -132,6 +133,8 @@ connectivity-compose-device = { module = "dev.jordond.connectivity:connectivity-
 connectivity-compose-http = { module = "dev.jordond.connectivity:connectivity-compose-http", version.ref = "connectivity" }
 
 qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
+rinku = { module = "dev.theolm:rinku", version.ref = "rinku" }
+rinku-compose-ext = { module = "dev.theolm:rinku-compose-ext", version.ref = "rinku" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 
 
