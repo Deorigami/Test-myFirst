@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.cmp.template.di.RootAppModule
 import dev.theolm.rinku.Rinku
+import dev.theolm.rinku.RinkuInit
+import dev.theolm.rinku.compose.ext.Rinku
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
@@ -23,14 +25,17 @@ class MyApp : Application() {
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Rinku.onDeepLinkReceived(intent)
+        RinkuInit()
         enableEdgeToEdge()
-        setContent { RootApp() }
+        setContent {
+            Rinku() {
+                RootApp()
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        Rinku.onDeepLinkReceived(intent)
     }
 }

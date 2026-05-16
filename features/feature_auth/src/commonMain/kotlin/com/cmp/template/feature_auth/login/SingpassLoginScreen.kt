@@ -25,12 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.cmp.template.components.SingpassButton
 import com.cmp.template.components.SingpassButtonStyle
 import com.cmp.template.components.SingpassFooter
 import com.cmp.template.core_feature.base.BaseScreen
 import com.cmp.template.theme.AppBlue
 import com.cmp.template.theme.SingpassRed
+import dev.theolm.rinku.compose.ext.DeepLinkListener
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -42,7 +44,11 @@ object SingpassLoginScreen : BaseScreen() {
         val launcher  = rememberChromeLauncher()
         val viewModel = koinViewModel<SingpassLoginScreenModel> { parametersOf(launcher) }
         val state     by viewModel.state.collectAsState()
-
+        DeepLinkListener { deepLink ->
+            // Deep link received — route based on URI
+            // e.g. deepLink.data = "com.cmp.template://callback?code=..."
+            Logger.d("Deeplink") { deepLink.data }
+        }
         SingpassLoginContent(
             state    = state,
             onEvent  = viewModel::onEvent,
