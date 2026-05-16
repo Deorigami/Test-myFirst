@@ -31,5 +31,5 @@ kotlin.sourceSets.androidMain.configure {
 }
 
 ktorfit {
-	this.compilerPluginVersion.set("2.3.3")
+	this.compilerPluginVersion.set("2.3.4")
 }

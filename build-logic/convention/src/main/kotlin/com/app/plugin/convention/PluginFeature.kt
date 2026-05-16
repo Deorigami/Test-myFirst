@@ -33,9 +33,9 @@ class PluginFeature : Plugin<Project> {
             val compose = extensions.getByType(ComposeExtension::class.java).dependencies
 
             extensions.configure<KotlinMultiplatformExtension> {
-				compilerOptions {
-					freeCompilerArgs.set(listOf("-Xcontext-parameters", "-Xskip-prerelease-check"))
-				}
+			compilerOptions {
+				freeCompilerArgs.set(listOf("-Xskip-prerelease-check"))
+			}
                 androidTarget {
                     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
                     instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
@@ -44,7 +44,6 @@ class PluginFeature : Plugin<Project> {
                 jvm()
 
                 listOf(
-                    iosX64(),
                     iosArm64(),
                     iosSimulatorArm64()
                 ).forEach {
@@ -59,11 +58,11 @@ class PluginFeature : Plugin<Project> {
                     commonMain.configure {
                         kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
                         dependencies {
-                            implementation(compose.runtime)
-                            implementation(compose.foundation)
-                            implementation(compose.material3)
-                            implementation(compose.components.resources)
-                            implementation(compose.components.uiToolingPreview)
+                            implementation("org.jetbrains.compose.runtime:runtime:1.11.0")
+                            implementation("org.jetbrains.compose.foundation:foundation:1.11.0")
+                            implementation("org.jetbrains.compose.material3:material3:1.9.0")
+                            implementation("org.jetbrains.compose.components:components-resources:1.11.0")
+                            implementation("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0")
 
 							implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
 							implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
@@ -126,7 +125,7 @@ class PluginFeature : Plugin<Project> {
                 }
             }
             extensions.configure<LibraryExtension> {
-                compileSdk = 36
+                compileSdk = 37
                 defaultConfig {
                     minSdk = 24
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

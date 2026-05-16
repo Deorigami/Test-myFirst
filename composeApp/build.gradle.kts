@@ -24,7 +24,7 @@ kotlin {
     jvm()
 
     listOf(
-        iosX64(),
+//        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -34,18 +34,19 @@ kotlin {
         }
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-XXLanguage:+ExplicitBackingFields")
+    }
+
     sourceSets {
-        all {
-            languageSettings.enableLanguageFeature("ExplicitBackingFields")
-        }
         commonMain.configure {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation("org.jetbrains.compose.runtime:runtime:1.11.0")
+                implementation("org.jetbrains.compose.foundation:foundation:1.11.0")
+                implementation("org.jetbrains.compose.material3:material3:1.9.0")
+                implementation("org.jetbrains.compose.components:components-resources:1.11.0")
+                implementation("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0")
                 implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
                 implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
                 implementation(libs.kermit)
@@ -117,11 +118,11 @@ kotlin {
 
 android {
     namespace = "com.cmp.template"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         applicationId = "com.cmp.template"
         versionCode = 1
         versionName = "1.0.0"

@@ -42,7 +42,6 @@ class PluginService : Plugin<Project> {
                 jvm()
 
                 listOf(
-                    iosX64(),
                     iosArm64(),
                     iosSimulatorArm64()
                 ).forEach {
@@ -95,7 +94,7 @@ class PluginService : Plugin<Project> {
 				schemaDirectory("$projectDir/schemas")
 			}
             extensions.configure<LibraryExtension> {
-                compileSdk = 36
+                compileSdk = 37
                 defaultConfig {
                     minSdk = 24
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
