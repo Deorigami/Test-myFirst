@@ -3,7 +3,8 @@
 camerak = "0.1.0"
 faceDetection = "16.1.7"
 hazeMaterials = "2.0.0"
-inspektor = "1.2.5"
+inspektor = "1.2.12"
+chucker = "4.3.1"
 room = "2.8.4"
 koinAnnotationsBom = "2.3.1"
 koinBom = "4.1.1"
@@ -48,6 +49,7 @@ android-faceDetection = { module = "com.google.mlkit:face-detection", version.re
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "hazeMaterials" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeMaterials" }
 inspektor = { module = "io.github.orioneee:axer", version.ref = "inspektor" }
+chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 composeMediaPlayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composeMediaPlayer" }

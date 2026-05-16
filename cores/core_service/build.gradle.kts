@@ -13,6 +13,23 @@ kotlin.sourceSets.commonMain.configure {
 	}
 }
 
+// Axer HTTP recorder on non-Android targets
+kotlin.sourceSets.getByName("iosMain").dependencies {
+	implementation(libs.inspektor)
+}
+kotlin.sourceSets.jvmMain.configure {
+	dependencies {
+		implementation(libs.inspektor)
+	}
+}
+
+// Chucker HTTP recorder on Android (supports copy-all feature)
+kotlin.sourceSets.androidMain.configure {
+	dependencies {
+		implementation(libs.chucker)
+	}
+}
+
 ktorfit {
 	this.compilerPluginVersion.set("2.3.3")
 }
