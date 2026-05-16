@@ -37,8 +37,10 @@ include(
     ":composeApp",
 
     ":features:feature_sample",
+    ":features:feature_auth",
 
     ":services:service_sample",
+    ":services:service_auth",
 
     ":cores:core_feature",
     ":cores:components",

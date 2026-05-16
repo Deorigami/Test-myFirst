@@ -82,8 +82,10 @@ kotlin {
                 implementation(project(":cores:components"))
                 // Feature modules — add new features here
                 implementation(project(":features:feature_sample"))
+                implementation(project(":features:feature_auth"))
                 // Service modules — add new services here
                 implementation(project(":services:service_sample"))
+                implementation(project(":services:service_auth"))
             }
         }
 
