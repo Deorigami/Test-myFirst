@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.cmp.template.components.SingpassButton
+import com.cmp.template.components.SingpassButtonStyle
 import com.cmp.template.components.SingpassFooter
 import com.cmp.template.core_feature.base.BaseScreen
 import com.cmp.template.theme.AppBlue
@@ -78,20 +80,14 @@ private fun SingpassLoginContent(
             )
 
             Spacer(Modifier.height(24.dp))
-
-            Button(
+            SingpassButton(
                 onClick = { onEvent.invoke(SingpassLoginScreenEvent.FetchAuthUrl) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppBlue),
-            ) {
-                Text(
-                    text = "Open Singpass",
-                    style = MaterialTheme.typography.labelLarge,
-                )
-            }
+                style = SingpassButtonStyle.White
+            )
+
         }
     }
 }
