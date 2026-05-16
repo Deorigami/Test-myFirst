@@ -9,12 +9,9 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class SingpassLoginScreenModel(
+    private val chromeTabLauncher: ChromeTabLauncher,
     private val getSingpassAuthUrlUseCase: GetSingpassAuthUrlUseCase,
 ) : BaseScreenModel<SingpassLoginScreenState>(SingpassLoginScreenState()) {
-
-    init {
-        fetchAuthUrl()
-    }
 
     fun onEvent(event: SingpassLoginScreenEvent) {
         when (event) {
@@ -27,15 +24,16 @@ class SingpassLoginScreenModel(
         updateState { copy(isLoading = true, error = null) }
         viewModelScope.launch {
             getSingpassAuthUrlUseCase.execute(Unit) { result ->
-                when (result) {
-                    is StatefulResult.Success -> updateState {
-                        copy(authUrl = result.data.authUrl, isLoading = false)
-                    }
-                    is StatefulResult.Error   -> updateState {
-                        copy(error = result.error.message, isLoading = false)
-                    }
-                    is StatefulResult.Loading -> updateState { copy(isLoading = true) }
-                }
+                chromeTabLauncher.launch("https://google.com")
+//                when (result) {
+//                    is StatefulResult.Success -> updateState {
+//                        copy(authUrl = result.data.authUrl, isLoading = false)
+//                    }
+//                    is StatefulResult.Error   -> updateState {
+//                        copy(error = result.error.message, isLoading = false)
+//                    }
+//                    is StatefulResult.Loading -> updateState { copy(isLoading = true) }
+//                }
             }
         }
     }
