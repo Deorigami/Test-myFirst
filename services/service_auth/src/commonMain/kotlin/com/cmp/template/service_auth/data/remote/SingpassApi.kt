@@ -5,6 +5,7 @@ import com.cmp.template.service_auth.data.remote.dto.SingpassTokenRequest
 import com.cmp.template.service_auth.data.remote.dto.SingpassTokenResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 
 interface SingpassApi {
@@ -19,6 +20,7 @@ interface SingpassApi {
      * In production this would call the real Singpass FAPI token endpoint
      * (proxied through your backend for client-secret safety).
      */
+    @Headers("Content-Type: application/json")
     @POST("functions/v1/singpass-token")
     suspend fun exchangeToken(@Body request: SingpassTokenRequest): SingpassTokenResponse
 }

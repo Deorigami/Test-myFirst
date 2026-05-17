@@ -45,13 +45,11 @@ object SingpassLoginScreen : BaseScreen() {
         val viewModel = koinViewModel<SingpassLoginScreenModel> { parametersOf(launcher) }
         val state     by viewModel.state.collectAsState()
         DeepLinkListener { deepLink ->
-            // Deep link received — route based on URI
-            // e.g. deepLink.data = "com.cmp.template://callback?code=..."
-            Logger.d("Deeplink") { deepLink.data }
+            viewModel.onDeeplinkReceived(deepLink.parameters)
         }
         SingpassLoginContent(
-            state    = state,
-            onEvent  = viewModel::onEvent,
+            state   = state,
+            actions = viewModel,
         )
     }
 }
@@ -59,7 +57,7 @@ object SingpassLoginScreen : BaseScreen() {
 @Composable
 private fun SingpassLoginContent(
     state: SingpassLoginScreenState,
-    onEvent: (SingpassLoginScreenEvent) -> Unit,
+    actions: SingpassLoginScreenEvent,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -87,7 +85,7 @@ private fun SingpassLoginContent(
 
             Spacer(Modifier.height(24.dp))
             SingpassButton(
-                onClick = { onEvent.invoke(SingpassLoginScreenEvent.FetchAuthUrl) },
+                onClick = actions::onRetry,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
@@ -97,4 +95,3 @@ private fun SingpassLoginContent(
         }
     }
 }
-

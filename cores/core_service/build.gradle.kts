@@ -8,6 +8,7 @@ kotlin.sourceSets.commonMain.configure {
 	dependencies {
 		implementation(libs.kotlinx.datetime)
 		implementation(libs.kermit)
+		implementation(libs.inspektor)
 	}
 }
 

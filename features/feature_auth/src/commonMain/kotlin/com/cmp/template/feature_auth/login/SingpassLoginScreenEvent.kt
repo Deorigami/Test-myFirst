@@ -1,7 +1,6 @@
 package com.cmp.template.feature_auth.login
 
-sealed interface SingpassLoginScreenEvent {
-    data object FetchAuthUrl : SingpassLoginScreenEvent
-    data object Retry        : SingpassLoginScreenEvent
+interface SingpassLoginScreenEvent {
+    fun onRetry()
+    fun onDeeplinkReceived(parameters: Map<String, String>)
 }
-

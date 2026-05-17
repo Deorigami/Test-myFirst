@@ -1,6 +1,7 @@
 package com.cmp.template.service_auth
 
 import com.cmp.template.service_auth.data.remote.SingpassApi
+import com.cmp.template.service_auth.data.remote.createSingpassApi
 import de.jensklingenberg.ktorfit.Ktorfit
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
@@ -10,6 +11,6 @@ import org.koin.core.annotation.Single
 @ComponentScan("com.cmp.template.service_auth")
 class ServiceAuthModule {
     @Single
-    fun provideSingpassApi(ktorfit: Ktorfit): SingpassApi = ktorfit.create()
+    fun provideSingpassApi(ktorfit: Ktorfit): SingpassApi = ktorfit.createSingpassApi()
 }
 

@@ -1,4 +1,6 @@
 ﻿package com.cmp.template.core_service.base
+import co.touchlab.kermit.Logger
+import com.cmp.template.core_service.model.CoreError
 import com.cmp.template.core_service.model.DomainResult
 import com.cmp.template.core_service.model.StatefulResult
 import com.cmp.template.core_service.model.toStateful
@@ -21,7 +23,10 @@ abstract class BaseUseCase<P, R> {
         _isLoading.update { true }
         coroutineScope.launch {
             val domainResult = runCatching { build(param) }
-                .getOrElse { e -> DomainResult.Error(com.cmp.template.core_service.model.CoreError(message = e.message ?: "Unknown")) }
+                .getOrElse { e ->
+                    Logger.e("USE_CASE"){"Error executing use case: ${e.message}"}
+                    DomainResult.Error(CoreError(message = e.message ?: "Unknown"))
+                }
             val stateful = domainResult.toStateful()
             result = (stateful as? StatefulResult.Success)?.data
             _isLoading.update { false }
@@ -31,7 +36,7 @@ abstract class BaseUseCase<P, R> {
     suspend fun execute(param: P, onResult: (StatefulResult<R>) -> Unit = {}) {
         _isLoading.update { true }
         val domainResult = runCatching { build(param) }
-            .getOrElse { e -> DomainResult.Error(com.cmp.template.core_service.model.CoreError(message = e.message ?: "Unknown")) }
+            .getOrElse { e -> DomainResult.Error(CoreError(message = e.message ?: "Unknown")) }
         val stateful = domainResult.toStateful()
         result = (stateful as? StatefulResult.Success)?.data
         _isLoading.update { false }

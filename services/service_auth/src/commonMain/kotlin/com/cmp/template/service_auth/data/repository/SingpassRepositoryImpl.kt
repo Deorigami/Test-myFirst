@@ -1,5 +1,6 @@
 package com.cmp.template.service_auth.data.repository
 
+import co.touchlab.kermit.Logger
 import com.cmp.template.core_service.model.CoreError
 import com.cmp.template.core_service.model.DomainResult
 import com.cmp.template.service_auth.data.remote.SingpassApi
@@ -29,26 +30,23 @@ class SingpassRepositoryImpl(
     }
 
     override suspend fun exchangeToken(code: String): DomainResult<SingpassUser> {
-        return runCatching {
-            val response = api.exchangeToken(SingpassTokenRequest(code = code))
-            val claims = response.decoded
-                ?: error("Missing decoded claims in token response")
-            val attrs = claims.subAttributes
-                ?: error("Missing sub_attributes in token claims")
+        val response = api.exchangeToken(SingpassTokenRequest(code = code))
+        Logger.d() { "Exchanging Singpass token with code: $code $response" }
+        val claims = response.decoded
+            ?: error("Missing decoded claims in token response")
+        val attrs = claims.subAttributes
+            ?: error("Missing sub_attributes in token claims")
 
-            DomainResult.Success(
-                SingpassUser(
-                    sub            = claims.subject ?: "",
-                    identityNumber = attrs.identityNumber ?: error("Missing identity_number"),
-                    name           = attrs.name ?: "",
-                    email          = attrs.email ?: "",
-                    mobileNo       = attrs.mobileNo ?: "",
-                    identityCoi    = attrs.identityCoi ?: "SG",
-                    accountType    = attrs.accountType ?: "standard",
-                )
+        return DomainResult.Success(
+            SingpassUser(
+                sub            = claims.subject ?: "",
+                identityNumber = attrs.identityNumber ?: error("Missing identity_number"),
+                name           = attrs.name ?: "",
+                email          = attrs.email ?: "",
+                mobileNo       = attrs.mobileNo ?: "",
+                identityCoi    = attrs.identityCoi ?: "SG",
+                accountType    = attrs.accountType ?: "standard",
             )
-        }.getOrElse { e ->
-            DomainResult.Error(CoreError(message = e.message ?: "Unknown error"))
-        }
+        )
     }
 }

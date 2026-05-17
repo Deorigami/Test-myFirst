@@ -21,8 +21,8 @@ object SampleScreen : BaseScreen() {
         val viewModel = koinViewModel<SampleScreenModel>()
         val state by viewModel.state.collectAsState()
         SampleScreenContent(
-            state = state,
-            onEvent = viewModel::onEvent
+            state   = state,
+            actions = viewModel,
         )
     }
 }
@@ -30,7 +30,7 @@ object SampleScreen : BaseScreen() {
 @Composable
 private fun SampleScreenContent(
     state: SampleScreenState,
-    onEvent: (SampleScreenEvent) -> Unit
+    actions: SampleScreenEvent,
 ) {
     Scaffold(
         topBar = {
@@ -52,7 +52,7 @@ private fun SampleScreenContent(
                 ) {
                     Text(text = state.error, color = MaterialTheme.colorScheme.error)
                     Spacer(Modifier.height(8.dp))
-                    Button(onClick = { onEvent(SampleScreenEvent.Refresh) }) {
+                    Button(onClick = actions::onRefresh) {
                         Text("Retry")
                     }
                 }
