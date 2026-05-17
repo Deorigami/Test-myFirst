@@ -11,7 +11,11 @@ actual fun rememberChromeLauncher(): ChromeTabLauncher {
         object : ChromeTabLauncher {
             override fun launch(url: String) {
                 if (Desktop.isDesktopSupported()) {
-                    Desktop.getDesktop().browse(URI(url))
+                    // Append platform=desktop so singpass-callback routes to
+                    // the local DeepLinkServer on http://localhost:54399
+                    val separator = if (url.contains("?")) "&" else "?"
+                    val fullUrl = "$url${separator}platform=desktop"
+                    Desktop.getDesktop().browse(URI(fullUrl))
                 }
             }
         }
