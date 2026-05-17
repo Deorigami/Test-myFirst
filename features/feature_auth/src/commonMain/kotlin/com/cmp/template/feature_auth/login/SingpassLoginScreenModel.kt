@@ -6,6 +6,7 @@ import com.cmp.template.core_service.model.StatefulResult
 import com.cmp.template.service_auth.domain.usecase.GetSingpassAuthUrlUseCase
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Factory
+import kotlin.uuid.ExperimentalUuidApi
 
 @Factory
 class SingpassLoginScreenModel(
@@ -20,21 +21,16 @@ class SingpassLoginScreenModel(
         }
     }
 
-    private fun fetchAuthUrl() {
+    @OptIn(ExperimentalUuidApi::class)
+	private fun fetchAuthUrl() {
         updateState { copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            getSingpassAuthUrlUseCase.execute(Unit) { result ->
-                chromeTabLauncher.launch("https://google.com")
-//                when (result) {
-//                    is StatefulResult.Success -> updateState {
-//                        copy(authUrl = result.data.authUrl, isLoading = false)
-//                    }
-//                    is StatefulResult.Error   -> updateState {
-//                        copy(error = result.error.message, isLoading = false)
-//                    }
-//                    is StatefulResult.Loading -> updateState { copy(isLoading = true) }
-//                }
-            }
+            // ngrok tunnel to local Supabase (real HTTPS domain)
+            val baseUrl = "https://2468-2402-8780-1023-7260-bd14-8585-92-92c4.ngrok-free.app"
+            val state = kotlin.uuid.Uuid.random().toString()
+            val mockUrl = "$baseUrl/functions/v1/singpass-mock?state=$state"
+            chromeTabLauncher.launch(mockUrl)
+            updateState { copy(isLoading = false) }
         }
     }
 }
