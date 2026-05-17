@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.ktorfit
-
 plugins {
 	id("plugin.service")
 }
@@ -14,12 +12,15 @@ kotlin.sourceSets.commonMain.configure {
 }
 
 // Axer HTTP recorder on non-Android targets
-kotlin.sourceSets.getByName("iosMain").dependencies {
-	implementation(libs.inspektor)
-}
-kotlin.sourceSets.jvmMain.configure {
+kotlin.sourceSets.iosMain.configure {
 	dependencies {
 		implementation(libs.inspektor)
+	}
+}
+
+kotlin.sourceSets.jvmMain.configure {
+	dependencies {
+		api(libs.inspektor)
 	}
 }
 
