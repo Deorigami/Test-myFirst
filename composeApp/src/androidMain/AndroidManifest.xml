@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="2468-2402-8780-1023-7260-bd14-8585-92-92c4.ngrok-free.app"
+                    android:host="3c90-2402-8780-1023-7260-651e-2ecd-e284-9be8.ngrok-free.app"
                     android:pathPrefix="/functions/v1/singpass-callback" />
             </intent-filter>
         </activity>

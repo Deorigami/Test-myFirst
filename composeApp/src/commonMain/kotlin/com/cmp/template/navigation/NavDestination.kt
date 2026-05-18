@@ -9,6 +9,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
 import com.cmp.template.core_feature.base.BaseScreen
 import com.cmp.template.feature_auth.login.SingpassLoginScreen
+import com.cmp.template.feature_auth.open_store.OpenStoreScreen
 import com.cmp.template.feature_sample.landing.SampleScreen
 import com.cmp.template.screen.splash.SplashScreen
 import kotlinx.serialization.Serializable
@@ -23,9 +24,11 @@ sealed interface NavDestinations : NavKey, NavDestinationScreen {
     data object SingpassLogin : NavDestinations {
         override fun getScreen(): BaseScreen = SingpassLoginScreen
     }
+    data object OpenStore : NavDestinations {
+        override fun getScreen(): BaseScreen = OpenStoreScreen
+    }
     companion object {
-        var backStack: SnapshotStateList<NavDestinations> =
-            mutableStateListOf<NavDestinations>(SingpassLogin)
+        var backStack: SnapshotStateList<NavDestinations> = mutableStateListOf(OpenStore)
     }
 }
 fun NavDestinations.setupNavigation(): NavEntry<NavDestinations> {
