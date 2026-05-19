@@ -22,7 +22,7 @@ class SingpassLoginScreenModel(
         viewModelScope.launch {
             @OptIn(ExperimentalUuidApi::class)
             val state   = kotlin.uuid.Uuid.random().toString()
-            val baseUrl = "https://3c90-2402-8780-1023-7260-651e-2ecd-e284-9be8.ngrok-free.app"
+            val baseUrl = "https://amoeba-current-iguana.ngrok-free.app/"
             chromeTabLauncher.launch("$baseUrl/functions/v1/singpass-mock?state=$state")
             updateState { copy(isLoading = false) }
         }

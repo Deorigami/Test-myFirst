@@ -12,7 +12,7 @@
         <activity
             android:name=".AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="3c90-2402-8780-1023-7260-651e-2ecd-e284-9be8.ngrok-free.app"
+                    android:host="amoeba-current-iguana.ngrok-free.app"
                     android:pathPrefix="/functions/v1/singpass-callback" />
             </intent-filter>
         </activity>

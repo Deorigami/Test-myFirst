@@ -100,8 +100,8 @@ fun AppTheme(
     CompositionLocalProvider(LocalThemeIsDark provides isDarkState) {
         val isDark by isDarkState
         MaterialTheme(
-            colorScheme = if (isDark) DarkColorScheme else LightColorScheme,
-            typography  = appTypography(),
+            colorScheme = if (false) DarkColorScheme else LightColorScheme,
+            typography  = remember { appTypography() },
             content     = { Surface(content = content) }
         )
     }
