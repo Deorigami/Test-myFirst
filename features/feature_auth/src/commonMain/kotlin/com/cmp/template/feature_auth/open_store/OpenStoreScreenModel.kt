@@ -1,6 +1,7 @@
 package com.cmp.template.feature_auth.open_store
 
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.cmp.template.core_feature.base.BaseScreenModel
 import com.cmp.template.core_service.base.BaseUseCase
 import com.cmp.template.feature_auth.di.FeatureAuthNavigation
@@ -20,7 +21,7 @@ import kotlin.uuid.ExperimentalUuidApi
 class OpenStoreScreenModel(
 	private val getSingpassAuthUrlUseCase: GetSingpassAuthUrlUseCase,
 	private val exchangeSingpassTokenUseCase: ExchangeSingpassTokenUseCase,
-	private val featureAuthNavigation: FeatureAuthNavigation
+	private val nav: FeatureAuthNavigation
 ) : BaseScreenModel<OpenStoreScreenState>(OpenStoreScreenState()),
 	OpenStoreScreenEvent
 {
@@ -55,11 +56,18 @@ class OpenStoreScreenModel(
 		}
 	}
 
-	override fun accessStatusButtonAction(status: Boolean) {
+	override fun accessStatusButtonAction() {
+		val status = state.value.accessStatus
 		updateState { copy(
 			accessStatus = null
 		) }
-
+		stopCountdownJob()
+		Logger.d("ANGGATAG"){"Access Status: $status"}
+		when(status){
+			true -> nav.navigateToHome()
+			false -> Unit
+			else -> Unit
+		}
 	}
 
 	private fun startCountdown() {
@@ -72,7 +80,7 @@ class OpenStoreScreenModel(
 					}
 				} else {
 					stopCountdownJob()
-					accessStatusButtonAction(state.value.accessStatus == true)
+					accessStatusButtonAction()
 					break
 				}
 				delay(1.seconds)

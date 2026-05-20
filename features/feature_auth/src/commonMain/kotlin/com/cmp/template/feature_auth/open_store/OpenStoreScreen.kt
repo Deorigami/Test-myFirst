@@ -80,7 +80,7 @@ private fun AccessStatus(
 			style = ts.Regular32.copy(Color8F93A2)
 		)
 		IcosOutlinedButton(
-			onClick = { event },
+			onClick = { event.accessStatusButtonAction() },
 			label = "Returning to home ($accessCountdown)",
 			modifier = Modifier.padding(top = 32.dp),
 			isLoading = false

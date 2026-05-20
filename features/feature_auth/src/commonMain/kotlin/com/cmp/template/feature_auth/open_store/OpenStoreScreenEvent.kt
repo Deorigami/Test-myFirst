@@ -5,5 +5,5 @@ import dev.theolm.rinku.DeepLink
 interface OpenStoreScreenEvent {
 	fun startSingpassAuthentication()
 	fun onSingpassDeeplinkReceived(deepLink: DeepLink)
-	fun accessStatusButtonAction(status: Boolean)
+	fun accessStatusButtonAction()
 }

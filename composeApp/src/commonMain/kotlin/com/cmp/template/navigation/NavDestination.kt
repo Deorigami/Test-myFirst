@@ -28,7 +28,7 @@ sealed interface NavDestinations : NavKey, NavDestinationScreen {
         override fun getScreen(): BaseScreen = OpenStoreScreen
     }
     companion object {
-        var backStack: SnapshotStateList<NavDestinations> = mutableStateListOf(OpenStore)
+        var backStack: MutableList<NavDestinations> = mutableStateListOf(OpenStore)
     }
 }
 fun NavDestinations.setupNavigation(): NavEntry<NavDestinations> {
