@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.cmp.template.di.RootAppModule
+import com.cmp.template.feature_auth.login.rememberChromeLauncher
 import dev.theolm.rinku.Rinku
 import dev.theolm.rinku.RinkuInit
 import dev.theolm.rinku.compose.ext.Rinku
@@ -30,6 +31,7 @@ class AppActivity : ComponentActivity() {
         setContent {
             Rinku() {
                 RootApp()
+                rememberChromeLauncher()
             }
         }
     }

@@ -5,20 +5,23 @@ import androidx.compose.runtime.remember
 import java.awt.Desktop
 import java.net.URI
 
+private fun browseUrl(url: String) {
+    if (Desktop.isDesktopSupported()) {
+        val separator = if (url.contains("?")) "&" else "?"
+        Desktop.getDesktop().browse(URI("$url${separator}platform=desktop"))
+    }
+}
+
 @Composable
 actual fun rememberChromeLauncher(): ChromeTabLauncher {
     return remember {
         object : ChromeTabLauncher {
-            override fun launch(url: String) {
-                if (Desktop.isDesktopSupported()) {
-                    // Append platform=desktop so singpass-callback routes to
-                    // the local DeepLinkServer on http://localhost:54399
-                    val separator = if (url.contains("?")) "&" else "?"
-                    val fullUrl = "$url${separator}platform=desktop"
-                    Desktop.getDesktop().browse(URI(fullUrl))
-                }
-            }
+            override fun launch(url: String) = browseUrl(url)
         }
     }
+}
+
+actual fun chromeLauncher(): ChromeTabLauncher = object : ChromeTabLauncher {
+    override fun launch(url: String) = browseUrl(url)
 }
 

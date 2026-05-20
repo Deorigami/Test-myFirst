@@ -1,6 +1,7 @@
 package com.cmp.template.feature_auth.open_store
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -38,25 +39,24 @@ object OpenStoreScreen : BaseScreen() {
 
 @Composable
 fun OpenStoreScreenContent() {
-	val browserTab = rememberChromeLauncher()
-	val viewModel = koinViewModel<OpenStoreScreenModel> {
-		parametersOf(browserTab)
-	}
+	val viewModel = koinViewModel<OpenStoreScreenModel>()
 	val state by viewModel.state.collectAsStateWithLifecycle()
 	val ts = rememberIcosTextStyles()
 	DeepLinkListener {
 		viewModel.onSingpassDeeplinkReceived(it)
 	}
-	if (state.accessStatus == null) MainStoreContent(
-		viewModel,
-		ts,
-		viewModel.isLoading.collectAsStateWithLifecycle().value
-	)
-	else AccessStatus(
-		state.accessStatus == true,
-		state.accessStatusCountdown,
-		viewModel
-	)
+	Box(modifier = Modifier.fillMaxSize().padding(24.dp)){
+		if (state.accessStatus == null) MainStoreContent(
+			viewModel,
+			ts,
+			viewModel.isLoading.collectAsStateWithLifecycle().value
+		)
+		else AccessStatus(
+			state.accessStatus == true,
+			state.accessStatusCountdown,
+			viewModel
+		)
+	}
 }
 
 @Composable
